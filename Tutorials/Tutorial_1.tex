@@ -1,0 +1,65 @@
+\section{$IP$ and $NP$}
+Claim:
+$NP\subseteq IP$.\\
+Proof: let $L\in NP$.
+There exists some $NP$ relation $R$ for $L$, with an efficient algorithm $M_R$ which decides it.\\
+Now define an $IP$ protocol:\\
+\begin{itemize}
+    \item Both $P$ and $V$ get $x$.
+    \item If $x\in L$ P find $y$ s.t. $(x,y)\in R$, and send it to $V$. Otherwise send $\epsilon$.
+    \item $V$ checks if $(x,y)\in R$ by running $M_R$ (known to be efficient) and accepts iff $M(x,y)$ accepts.
+\end{itemize}
+\begin{enumerate}
+    \item Completeness: If $x\in L$, such $y$ must exist ($NP$ definition) thus $P$ will find it, and $V$ will have $(x,y)\in R$ so $M_R$ and $V$ will accept.
+    \item Soundness: If $x\notin L$, there is no $y$ which such that $(x,y)\in R$ so no matter what any $P^*$ sends - $M_R(x,y)$ rejects and so $V$ rejects too.
+ \end{enumerate}
+
+\section{Similar Proof Systems}
+\subsection{Arthur-Merlin - $AM$}
+\begin{itemize}
+    \item Both parties get some input $x$.
+    \item Arthur sends Merlin some randomized $\alpha$.
+    \item Merlin sends back some $\beta$.
+    \item Arthur accepets according to some $PPT$ algorithm which is a function of $x,\alpha$ and $\beta$ (usually denoted $A(x,\alpha,\beta)$).
+\end{itemize}
+
+\subsection{Merlin-Arthur - $MA$}
+\begin{itemize}
+    \item Both parties get input $x$.
+    \item Merlin sends $\beta$ to Arthur.
+    \item Arthur generates some random value $\alpha$.
+    \item Arthur accepts according to some $PPT$ algorithm which is a function of $x,\alpha,\beta$.
+\end{itemize}
+
+Theorem: $MA\subseteq AM$.\\
+Proof: Let $L\in MA$.
+WLOG (without loss of generality), $L$ has a $MA$ protocol with perfect completeness (we will come back to this assumption later in the course).\\
+Denote by $p(n)$ the length $\beta$ ($|\beta|\leq p(n)$).\\
+
+Using repetition we can get to any protocol with perfect completeness and a soundness error of $2^{-p(n)-1}$ (as seen in lecture).\\
+Sketching the repeated protocol would look like:
+\begin{itemize}
+    \item $M'$ sends $\beta$ to $A'$
+    \item $A'$ sends back a list of $\alpha$ values (as many as there are repetitions).
+    \item $A'$ decides wether to accept.
+\end{itemize}
+This is because there is not reason for the prover's proof ($\beta$) to change due to different sampling of $\alpha$, so it is always the same and can be sent once. So the length of Merlin's message does not change in the repeating protocol.\\
+
+Now consider the same $M',A'$ protocol but where $A'$ sends the aggregated $\alpha$ before $M'$ sends $\beta$.
+
+Claim: This new protocol is $AM$.
+Proof:
+\begin{enumerate}
+    \item Completeness: $\forall x\in L, M'$ sends the same $\beta$ without looking at $\alpha$:
+    \[Pr[(M',A)(x)=1]=Pr[A(x,\alpha,\beta)=1]=1\]
+    \item Soundness: Let $x\notin L$, fix $M^*$.
+    Consider:
+    \[
+        Pr[(M^*,A')(x)=1]
+        =Pr[\exists\beta\in\{0,1\}^p: A'(x,\alpha,\beta)=1]
+    \]\[
+        =\cup_{\beta\in\{0,1\}^p} Pr[A'(x,\alpha,\beta)=1]
+        \leq_{UB} 2^p2^{-(p+1)}=\frac{1}{2}
+    \]
+    Note: $UB$ denotes Union Bound.
+\end{enumerate}

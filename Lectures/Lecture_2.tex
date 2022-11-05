@@ -1,0 +1,109 @@
+\section{Recap}
+\subsection{Remarks on $GI$}
+\begin{itemize}
+    \item For any graph $G$, the set of all $(G,G')$, where $G'$ is isomorphic to $G$ is an equivalence relation.
+    \item For any graph $G$: $(\pi(G))_{\pi\leftarrow\mathbf{U}}\approx\mathbf{Iso(G)}$ - meaning uniformly sampling a permutation (over the set of nodes) of $G$ and applying it to $G$ will yield a uniformly sampled graph from the same equivalence partition.
+\end{itemize}
+\subsection{$GNI\subseteq IP$}
+To prove this we will present an interactive protocol that runs on input $G_0, G_1$:
+\begin{itemize}
+    \item $V$ samples $b\leftarrow \{0,1\},\pi\leftarrow \{\texttt{permutations}\}$.
+    \item $V$ sends $G=\pi(G_b)$.
+    \item $P$ checks: if $G\approx G_0$, $b'=0$ else $b'=1$.
+    \item $P$ sends $b'$ to $V$.
+    \item $V$ accepts iff $b=b'$.
+\end{itemize}
+Now we prove that this interactive protocol is indeed an interactive proof for $GNI$:
+\begin{enumerate}
+    \item Soundness:
+    Let $G_0\approx G_1$ and let $P^*$ be a (possibly) cheating prover.\\
+    If $b=0$ then $G$ is uniformly distributed over all graphs isomorphic to $G_0$.\\ If $b=1$ then $G$ is uniformly distributed over all graphs isomorphic to $G_1$, but due to transitivity, this is the same as the prior case, meaning in any case, $G$ is distributed uniformly over the equivalence to $G_0$.\\
+    Since this is the case, no information has been passed from $V$ to $P^*$ by sending $G$ ($P^*$ could have just sampled a graph from $Iso(G_0)$ itself!), $P^*$ could not do more than guess $b$, and it's probability for success is no more than $\frac{1}{2}$.
+    \item Completeness: If the graphs are not isomorphic, $G\approx G_0$ iff $b=0$, which will mean $b=b'$ is always the case and $V$ always accepts.
+    \item Runtime: $V$ does nothing of high complexity, $P$ is unbounded.
+\end{enumerate}
+
+
+\section{Equivalence between $IP$ and $AM[Poly]$}
+\subsection{Lemma: Set Lower Bound Protocol}%TODO: add protocol and proof
+
+\subsection{Theorem}
+\begin{itemize}
+    \item $IP[k]$: $k$-round interactive proof.
+    \item $AM[k]$: $k$-round public coin interactive proof.
+\end{itemize}
+Claim (no proof):
+$AM[k]\subseteq IP[k]$.\\
+Theorem:
+$IP[k]\subseteq AM[k+2]$.\\
+Corollary: $IP=AM[Poly]$.\\
+Theorem Proof:\\
+Let $L$ be a language with an $IP$ which satisfies the following assumptions:
+\begin{enumerate}
+    \item $k=2$.
+    \item Perfect Completeness.
+    \item There is a set of $N$ of possible verifier messages which is constant for any specific protocol input $x$.
+    \item The message $m$ sent by $V$ is uniformly distributed over the $N$ possible messages that could be sent.
+    \item The soundness error is $\frac{1}{100}$.
+\end{enumerate}
+We want to show that $L$ is in $AM[k+2]$.\\
+First, note how our $IP$ can be described as follows when running on input $x$:\\
+\begin{itemize}
+    \item $V$ samples some $r\leftarrow\{0,1\}$.
+    \item $V$ calculates some $m=V_1(x,r)$ for some efficient function $V_1$.
+    \item $V$ sends $m$ to $P$.
+    \item $P$ sends back some $\pi$.
+    \item $V$ accepts iff $V_2(x,\pi,r)=1$ for some efficient function $V_2$.
+\end{itemize}
+Define:
+\[R_m=\{r'\mid m=V_1(x,r')\}, S_m=\{r'\in R_m\mid V_2(x,\pi,r')=1\}\]
+Now consider an alternative protocol, which is the same as the one above, only $V$ also samples $r'\leftarrow R_m$ and accepts iff $V_2(x,\pi, r')$.
+
+Note how $|R_m|=\frac{2^l}{N}$, and if $x\in L$ then $S_m=R_m$.
+Claim (missing proof):\\%TODO add proof
+if $x\in L$ then $\mathbf{E}(|S_m|)=\frac{2^l}{N}$ and otherwise $\mathbf{E}(|S_m|)\leq \frac{1}{100}\frac{2^l}{N}$.\\
+
+\subsection{Pairwise Independent Hash Functions}
+Definition:
+A set of hash functions $\{h:X\leftarrow Y\}$ is pairwise independent if for all $x_1, x_2\in X$ where $x_1\neq x_2$ and $y_1,y_2\in Y$, they satisfy:
+\[Pr_{h\leftarrow H}[h(x_1)=y_1\wedge h(x_2)=y_2]=\frac{1}{|Y|^2}\]
+Construction:\\
+Let $\mathbf{F}$ be a finite field.
+Given $a,b\in\mathbf{F}: h_{a,b}(x)=ax+b$.\\
+Let $H=\{h_{a,b}\mid a,b\in\mathbf{F}\}$.\\
+Construction proof:\\
+Let $x_1,x_2,y_1,y_2$ as described in definition.\\
+\[
+    Pr_{a,b}[ax_1+b=y_1\wedge ax_2+b=y_2]
+    =Pr_{a,b}[
+\begin{pmatrix}
+x_1 & 1\\
+x_2 & 1
+\end{pmatrix}
+\begin{pmatrix}
+a\\
+b
+\end{pmatrix}
+=
+\begin{pmatrix}
+y_1\\
+y_2
+\end{pmatrix}
+]\]
+\[
+ =Pr_{a,b}[
+\begin{pmatrix}
+a\\
+b
+\end{pmatrix}
+=
+\begin{pmatrix}
+x_1 & 1\\
+x_2 & 1
+\end{pmatrix}^{-1}
+\begin{pmatrix}
+y_1\\
+y_2
+\end{pmatrix}
+]=\frac{1}{|\mathbf{F}|^2}\]
+For the last transition: Note how the right value of the equality (in the probability) is just a constant value, so we just need to randomly sample $a,b$ to be some spesific values within a finite field.

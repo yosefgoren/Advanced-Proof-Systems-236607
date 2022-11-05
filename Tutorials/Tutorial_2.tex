@@ -1,0 +1,54 @@
+\section{Perfect Completeness?}
+We have seen in the lecture how an $IP$ can be reduced to an $AM$ proof, or in other words; a public coin $IP$. Here, we would like to show how any $AM$ can be reduced to an $AM$ with perfect completeness (which is also an $IP$ with perfect completeness).\\
+This means that $\forall L\in IP$, it must have a public coin, perfectly complete interactive proof.\\
+To construct the reduction, we start with the following $z$-round public coin protocol ($AM[z]$), which runs on input $X$:
+\begin{itemize}
+    \item $A$ samples $\alpha\leftarrow \{0,1\}^{rc}$, and sends it to $M$.
+    \item $M$ calculates $\beta=M(X,\alpha)$ and sends it to $m$.
+    \item $A$ accepts iff $A(X,\alpha,\beta)=1$.
+\end{itemize}
+Where we assume completeness error $\epsilon>0$:
+\[\forall x\in L:
+Pr[(M,A)(X)=1]\geq 1-\epsilon\]
+\[\Rightarrow \forall x\in L:
+Pr[\exists \beta: A(X,\alpha,\beta)=1]\geq 1-\epsilon\]
+
+%TODO: add intermidiate protocol (k=1)
+
+Now, we want to use it to construct an equivalent with perfect completeness; for that end, consider the alternative protocol:
+\begin{itemize}
+    \item $M'$ samples $s_1,s_2,...,s_k\leftarrow \{0,1\}^{rc}$. s.t. (*)
+    \[\forall \alpha \{0,1\}^{rc},\exists i\in [k]: s_i\oplus \alpha\notin REJ\].
+    \item $M'$ sends $s_1,s_2,...,s_k$ to $A'$.
+    \item $A'$ samples $\alpha \leftarrow \{0,1\}^{rc}$ and sends it to $M'$.
+    \item $M'$ calculates $\forall i: \beta_i=M(X,s_i\oplus\alpha)$ and sends it.
+    \item $A'$ accepts iff $\left(\exists i:A(X,s_i\oplus\alpha, \beta_i)\right)=1$
+\end{itemize}
+
+Lemma 1:
+if $x\in L$ then pre-processing succeeds.\\
+We denote $\bar{s}=(s_1,s_2,...,s_k)$. We say that $\bar{s}$ is 'good' if it satisfies (*).\\
+To prove the lemma, we can show that:
+\[
+    \exists \bar{s}:\bar{s}\texttt{ is good }
+\]
+We will show this by first showing:
+\[
+    Pr[\bar{s}\texttt{ is good }]>0
+\]
+To start off:
+\[
+    Pr_{\bar{s}}[\bar{s}\texttt{ is not good }]
+    =Pr_{\bar{s}}[\exists\alpha, \forall i:s_i\oplus\alpha\in REJ]
+\]\[
+    =Pr_{\bar{s}}[\bigcup_\alpha\left(\forall i: s_i\oplus\alpha\in REJ\right)]
+%\]\[
+%    =Pr_{\alpha_1, \alpha_2,...,\alpha_k\leftarrow \mathbf{U}}[\bigcup_\alpha\left(\forall i: \alpha_i\in REJ\right)]
+\leq 2^{rc}\cdot \epsilon^k
+\]
+From here we can see that for $k$ of at-least $rc$, the probability is less then 1, meaning that the complementory probability is more than 0, meaning :
+\[
+    \exists \bar{s}:\bar{s}\texttt{ is good }
+\]
+Completeness is trivial given Lemma 1.\\
+Soundness of the protocol can be found in notes of Tutorial 2 in the website.
