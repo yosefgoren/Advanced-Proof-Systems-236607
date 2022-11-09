@@ -1,10 +1,10 @@
-\section{Recap}
-\subsection{Remarks on $GI$}
+\section*{Recap}
+\subsection*{Remarks on $GI$}
 \begin{itemize}
     \item For any graph $G$, the set of all $(G,G')$, where $G'$ is isomorphic to $G$ is an equivalence relation.
-    \item For any graph $G$: $(\pi(G))_{\pi\leftarrow\mathbf{U}}\approx\mathbf{Iso(G)}$ - meaning uniformly sampling a permutation (over the set of nodes) of $G$ and applying it to $G$ will yield a uniformly sampled graph from the same equivalence partition.
+    \item For any graph $G$: $(\pi(G))_{\pi\leftarrow\mathbb{U}}\approx\mathbb{Iso(G)}$ - meaning uniformly sampling a permutation (over the set of nodes) of $G$ and applying it to $G$ will yield a uniformly sampled graph from the same equivalence partition.
 \end{itemize}
-\subsection{$GNI\subseteq IP$}
+\subsection*{$GNI\subseteq IP$}
 To prove this we will present an interactive protocol that runs on input $G_0, G_1$:
 \begin{itemize}
     \item $V$ samples $b\leftarrow \{0,1\},\pi\leftarrow \{\texttt{permutations}\}$.
@@ -24,10 +24,10 @@ Now we prove that this interactive protocol is indeed an interactive proof for $
 \end{enumerate}
 
 
-\section{Equivalence between $IP$ and $AM[Poly]$}
-\subsection{Lemma: Set Lower Bound Protocol}%TODO: add protocol and proof
+\section*{Equivalence between $IP$ and $AM[Poly]$}
+\subsection*{Lemma: Set Lower Bound Protocol}%TODO: add protocol and proof
 
-\subsection{Theorem}
+\subsection*{Theorem}
 \begin{itemize}
     \item $IP[k]$: $k$-round interactive proof.
     \item $AM[k]$: $k$-round public coin interactive proof.
@@ -61,16 +61,16 @@ Now consider an alternative protocol, which is the same as the one above, only $
 
 Note how $|R_m|=\frac{2^l}{N}$, and if $x\in L$ then $S_m=R_m$.
 Claim (missing proof):\\%TODO add proof
-if $x\in L$ then $\mathbf{E}(|S_m|)=\frac{2^l}{N}$ and otherwise $\mathbf{E}(|S_m|)\leq \frac{1}{100}\frac{2^l}{N}$.\\
+if $x\in L$ then $\mathbb{E}(|S_m|)=\frac{2^l}{N}$ and otherwise $\mathbb{E}(|S_m|)\leq \frac{1}{100}\frac{2^l}{N}$.\\
 
-\subsection{Pairwise Independent Hash Functions}
+\subsection*{Pairwise Independent Hash Functions}
 Definition:
 A set of hash functions $\{h:X\leftarrow Y\}$ is pairwise independent if for all $x_1, x_2\in X$ where $x_1\neq x_2$ and $y_1,y_2\in Y$, they satisfy:
 \[Pr_{h\leftarrow H}[h(x_1)=y_1\wedge h(x_2)=y_2]=\frac{1}{|Y|^2}\]
 Construction:\\
-Let $\mathbf{F}$ be a finite field.
-Given $a,b\in\mathbf{F}: h_{a,b}(x)=ax+b$.\\
-Let $H=\{h_{a,b}\mid a,b\in\mathbf{F}\}$.\\
+Let $\mathbb{F}$ be a finite field.
+Given $a,b\in\mathbb{F}: h_{a,b}(x)=ax+b$.\\
+Let $H=\{h_{a,b}\mid a,b\in\mathbb{F}\}$.\\
 Construction proof:\\
 Let $x_1,x_2,y_1,y_2$ as described in definition.\\
 \[
@@ -105,5 +105,5 @@ x_2 & 1
 y_1\\
 y_2
 \end{pmatrix}
-]=\frac{1}{|\mathbf{F}|^2}\]
+]=\frac{1}{|\mathbb{F}|^2}\]
 For the last transition: Note how the right value of the equality (in the probability) is just a constant value, so we just need to randomly sample $a,b$ to be some spesific values within a finite field.

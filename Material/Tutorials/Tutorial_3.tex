@@ -1,0 +1,55 @@
+\section*{Computational \& Statistical Zero Knowledge}
+\subsection*{Distinguisher and Advantage - Definition}
+A distinguisher $D$ is a probabilistic polynomial time algorithm;
+it receives an input $w$ and tries to decide if $w\in X$ or $w\in Y$.\\
+The advantage of $D$ over $X, Y$ is defined as:
+\[
+	adv_D(X,Y):=|Pr_{w\leftarrow X}[D(w)=1]-Pr_{w\leftarrow Y}[D(w)=1]|	
+\]
+
+\subsection*{Negligable Functions}
+A negligable function is a function
+$\epsilon:\mathbb{N}\rightarrow\mathbb{R}$ s.t.
+\[\forall c\in\mathbb{R}, \epsilon(n)=o(\frac{1}{n^c})\]
+This is equivalent to saying that:
+\[\forall\texttt{polynomial }p(n), \epsilon(n)\leq \frac{1}{p(n)}\]
+
+\subsection*{Computational Indistinguishability}
+Let $X,Y$ be two ensambles of distributions, meaning
+that each of them consists of a seiries of distributions:
+\[
+	X=\{X_1,X_2,...\}, Y=\{Y_1,Y_2,...\}
+\]
+We say that $X$ is computationally indistinguishable from $Y$ if
+for every distinguisher $D$ there exists a negligable function $\epsilon$
+such that:
+\[
+	\forall n\in\mathbb{N}, adv_D(X_n,Y_n)\leq \epsilon(n)
+\]
+
+\section*{$ZKP$ for $3COL$ (more formally)}
+Given an input graph $G=([n],E)$:
+\begin{itemize}
+	\item $P$ finds a $3$-coloring $\phi$ of $G$.
+	\item $P$ samples a permutation $\xi$ over $[3]$ (the colors).
+	\item $\forall v\in[n]$, 'put $\xi(v)$ in a box' $\beta_v$ and send it to $V$.
+	\item $V$ samples $(u,v)=e\leftarrow E$ and sends it to $P$.
+	\item $P$ sends the keys for $\beta_v$ and $\beta_u$ to $V$.
+	\item $V$ accepts iff colors 'inside' $\beta_v, \beta_u$ are different.
+\end{itemize}
+To formalize the idea of these 'boxes' we define the 
+notion of a commitment scheme:\\
+A \textbf{commitment scheme} is a pair of PPT algorithms: $commit, check$ with the following
+syntax:
+\begin{itemize}
+	\item $commit(b;r)\rightarrow c$
+	\item $check(c,b,r)\rightarrow \{0,1\}$
+\end{itemize}
+And which satisfy the following conditions:
+\begin{enumerate}
+	\item \textbf{Computationally Hiding}: $commit(0)\approx_C commit(1)$.
+	\item \textbf{Perfectly Binding}: There is no $n_0,r_0,r_1$ and $C^*$ s.t.
+	\[
+		check(C^*,0,r_0)=check(C^*,1,r_1)=1\texttt{ (1 means accept)}	
+	\]
+\end{enumerate}

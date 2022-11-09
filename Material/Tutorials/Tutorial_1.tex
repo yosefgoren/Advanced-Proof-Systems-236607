@@ -1,4 +1,4 @@
-\section{$IP$ and $NP$}
+\section*{$IP$ and $NP$}
 Claim:
 $NP\subseteq IP$.\\
 Proof: let $L\in NP$.
@@ -14,8 +14,8 @@ Now define an $IP$ protocol:\\
     \item Soundness: If $x\notin L$, there is no $y$ which such that $(x,y)\in R$ so no matter what any $P^*$ sends - $M_R(x,y)$ rejects and so $V$ rejects too.
  \end{enumerate}
 
-\section{Similar Proof Systems}
-\subsection{Arthur-Merlin - $AM$}
+\section*{Similar Proof Systems}
+\subsection*{Arthur-Merlin - $AM$}
 \begin{itemize}
     \item Both parties get some input $x$.
     \item Arthur sends Merlin some randomized $\alpha$.
@@ -23,7 +23,7 @@ Now define an $IP$ protocol:\\
     \item Arthur accepets according to some $PPT$ algorithm which is a function of $x,\alpha$ and $\beta$ (usually denoted $A(x,\alpha,\beta)$).
 \end{itemize}
 
-\subsection{Merlin-Arthur - $MA$}
+\subsection*{Merlin-Arthur - $MA$}
 \begin{itemize}
     \item Both parties get input $x$.
     \item Merlin sends $\beta$ to Arthur.
