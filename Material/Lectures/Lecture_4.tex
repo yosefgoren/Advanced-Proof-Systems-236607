@@ -1,0 +1,27 @@
+\section*{$coNP\subseteq IP$}
+\subsection*{Arithmetization}
+We interested in a reduction from a $coNP$ problem to an arithmetic
+problem.\\
+
+\underline{The Sumcheck Problem:}\\
+Parameters: a finite field $\mathbb{F}$, and $n,d\in\mathbb{N}$.\\
+Input: $Q:\mathbb{F}^n\leftarrow\mathbb{F}$, $\alpha\in\mathbb{F}$.
+Problem: does $\sum_{x\in\{0,1\}^n}Q(x)=\alpha$ ?\\
+
+\underline{The reduction}
+We will be reducing from $coNP$ to the sumcheck problem
+by reducing $3-CNF$ to it (since $3-CNF$ is $coNP$-complete).\\
+Let $\phi\in 3-CNF$ with $n$ variables and $m$ clauses.\\
+We will start the construction by translating each building block
+of $3-CNF$ formulas and expressing it in terms of polynomials:
+\begin{enumerate}
+	\item $\phi(x_1,x_2,...,x_n)=x_1\longrightarrow p(x_1,x_2,...,x_n)=x_1$
+	\item $x_1\wedge x_2 \longrightarrow x_1\cdot x_2$
+	\item $x_1\wedge \neg x_3\longrightarrow x_1\cdot(1-x_3)$
+	\item $(x_1)\vee (x_2)=\neg((\neg x_1)\wedge(\neg x_2))\longrightarrow 1-(1-x_1)\cdot(1-x_2)$
+\end{enumerate}
+Lemma: for every $3-CNF$ formula $\phi$ on $m$ clauses and a finite field $\mathbb{F}$,
+there exists a ploynomial $p:\mathbb{F}^n\rightarrow\mathbb{F}$ with degree $O(m)$ s.t.
+$\phi=p$.\\
+Furthermore, given $\phi$ and $z\in\mathbb{F}^n$, $p(z)$ can be
+evaluated in $poly(n,m,log(|\mathbb{F}|))$ time.
