@@ -1,8 +1,8 @@
-\section{Recap}
-\subsection{$P$ - Polynomial (Class)}
+\section*{Recap}
+\subsection*{$P$ - Polynomial (Class)}
 $L\in\{0,1\}^*$ is also in $P$ if there exists an efficient algorithm which decides it.
 
-\subsection{$NP$ - Nondeterministic Polynomial}
+\subsection*{$NP$ - Nondeterministic Polynomial}
 $L\in\{0,1\}^*$ is also in $NP$ if there exists an efficient algorithm $V$ and a polynomial $p$ which follow:
 
 \begin{enumerate}
@@ -10,10 +10,10 @@ $L\in\{0,1\}^*$ is also in $NP$ if there exists an efficient algorithm $V$ and a
     \item Soundness: $\forall x\notin L \forall y: V(x,y) \neq 1 \vee |y| \geq p(|x|)$
 \end{enumerate}
 
-\subsection{$PPT$ - Probobalistic Polynomial Time}
+\subsection*{$PPT$ - Probobalistic Polynomial Time}
 This is a class of algorithms which must run in time polynomial to the size of their input, but also - must be capable of randomization, or 'flipping coins'.
 
-\subsection{$IP$ - Interactive Proof}
+\subsection*{$IP$ - Interactive Proof}
 A key difference between an Interactive Proof and a proof for an NP proof is that the latter necessarily requires the prover to provide the verifier with something he can use to prove the truth of the calim to others.\\
 
 We denote $(P,V)(x)$ to be the output of $V$ (verifier) after the interaction between $P$ and $V$ on the input $x$. Both $P$ and $V$ can be thought of as $PPT$ algorithms or programs which are capable of communicating with one another.\\
@@ -30,17 +30,17 @@ Formal Definition:
 We say that $L\in IP$ if there exists a polynomial algorithm $V$, an unbounded algorithm $P$ and some constant $c\in (0.5, 1]$ s.t.
 \begin{enumerate}
     \item Completeness: $\forall x\in L, Pr[(P,V)(x)=1]>c$
-    \item Soundness: if $x\notin L,\forall P^*\in\mathbf{M}, Pr[(P^*,V)(x)=1]<1-c$
+    \item Soundness: if $x\notin L,\forall P^*\in\mathbb{M}, Pr[(P^*,V)(x)=1]<1-c$
 \end{enumerate}
-Note: $\mathbf{M}$ denotes the set of turing machines.
+Note: $\mathbb{M}$ denotes the set of turing machines.
 
 %todo: add definition for Perfect Completness
 
-\section{Equivalence of $IP$ separation constants}
-\subsection{Iterative Runs}
+\section*{Equivalence of $IP$ separation constants}
+\subsection*{Iterative Runs}
 Given an $IP$ protocol $(P,V)$, let $(P^k,V^k)$ be the protocol obtained by running $(P,V)$ k times sequentially. $V^k$ accepts iff in all iterations $V$ accepted.
 
-\subsection{Lemma}
+\subsection*{Lemma}
 if $(P,V)$ is $IP$ with perfect completeness then for every polynomial $k$, $(P^k, V^k)$ is $IP$ with perfect completeness and soundness error $2^{-\Omega (k)}$
 
 Proof:
@@ -63,8 +63,8 @@ Proof:
     \]
 \end{enumerate}
 
-\section{Graph Isomorphism \& $IP$ Example}
-\subsection{Graph Isomorphism - Definition}
+\section*{Graph Isomorphism \& $IP$ Example}
+\subsection*{Graph Isomorphism - Definition}
 The graphs $G_1=(V,E_1), G_2=(V,E_2)$ are isomorphic or $(G_1,G_2)\in GI$ if $\exists\pi:V\longrightarrow V$ s.t. $(u,v)\in E_1 \iff (\pi(u), \pi(v))\in E_2$.\\
 More simply - two graphs are isomorphic if they are identical up to a renaming of their vertices.\\
 

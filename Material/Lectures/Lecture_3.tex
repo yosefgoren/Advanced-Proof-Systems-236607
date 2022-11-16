@@ -1,0 +1,139 @@
+\section*{Public Coin Protocol For Set Size}
+\subsection*{Lemma (Set LB)}
+Exists a protocol $(P,V)$ such that:
+Given membership access to $s\subseteq U, t\subseteq \mathbb{N}$:
+\begin{enumerate}
+	\item Completeness:
+	\[|s|\geq t\Rightarrow Pr[V \texttt{ accepts}]\geq \frac{2}{3}\]
+	\item Soundness:
+	\[\forall P^*, |s|\leq \frac{t}{100}\Rightarrow Pr[V \texttt{ accepts}]\leq \frac{1}{3}\]
+\end{enumerate}
+
+% TODO: add pairwise independent function definition
+
+\subsection*{The Protocol}
+\begin{enumerate}
+	\item $V$ samples $h\leftarrow H$ where $H=\{h:U\rightarrow [t]\}$
+	\item $P$ finds $x\in S$ s.t. $h(x)=17$ and sends it to $V$ (if none exist, $P$ fails).
+	\item accepts iff $x\in S$ and $h(x) = 17$
+\end{enumerate}
+
+\subsection*{Proof}
+For $x\in U, h\in H$, denote $E_x$ if $h(x)=17$.\\
+Soundness: $|S|\leq\frac{t}{100}$.\\
+\[
+	Pr_{h\leftarrow H}[\exists x\in S, h(x)=17]
+	=Pr_{h\leftarrow H}[\bigcup_{x\in S}E_x]
+	\leq\sum_{x\in S}Pr[E_x]
+	=\frac{|S}{t}
+	\leq\frac{1}{100}
+\]
+Completeness: $|S|=t$.\\
+\[
+	Pr_{h\leftarrow H}[\exists x\in S, h(x)=17]
+	=Pr_{h\leftarrow H}[\bigcup_{x\in S}E_x]
+	\geq\sum_{x\in S}Pr[E_x]-Pr_{x,x'\in S, x<x'}[E_x\cap E_{x'}]
+\]\[
+	=\frac{|S|}{t}-\binom{|S|}{2}\frac{1}{t^2}
+	\geq \frac{|s|}{t}-\frac{|s|^2}{2t^2}=\frac{1}{2}
+\]
+
+\section*{Zero Knowlage Proofs ($ZKP$)}
+\subsection*{$ZKP$ protocol for $GI$}
+Given input $G_0, G_1$:
+\begin{itemize}
+	\item $P$ finds a permutation $\psi\in S_n$ s.t. $G_0=\psi(G_1)$.
+	\item $P$ uniformly samples a random permutation $\pi\leftarrow S_n$.
+	\item $P$ sends $G=\pi(G_0)$ to $V$.
+	\item $V$ samples $b\leftarrow \{0,1\}$ and sends it to $P$.
+	\item $P$ defines $\sigma=\pi$ if $b=0$ else $\sigma=\pi\circ\psi$ and sends it to $V$.
+	\item $V$ accepts iff $\sigma(G_b)=G$.
+\end{itemize}
+
+\subsection*{$HV-ZKP$ definition}
+An interactive proof $(P,V)$ is a honest-verifier zero knolage proof of $L\subseteq\{0,1\}^*$ if
+there exists a $PPT$ algorithm $S$ called 'the simulator' for which:
+$\forall x\in L:$
+The following distributions are 'similar':
+\begin{itemize}
+	\item $View^{x,p}(x):=(\texttt{the input }x,\texttt{ randomized coins }r, \texttt{ communications transcript})$
+	\item $S(x) \texttt{ (the output of the simulator)}$
+\end{itemize}
+Here 'similar' can mean two different things:
+\begin{itemize}
+	\item If it means identiacal, meaning these two distributions are the same distribution,
+	we call the protocol a \textbf{perfect $ZKP$}.
+	\item If it means that the distributions are computationally indistinguishable, we call the protocol a \textbf{statistical $ZKP$},
+	the definition for 'computationally indistinguishable' is in the next tutorial.
+\end{itemize} 
+
+
+The idea here is that since the verifier $V$ could have seen
+everything which is seen during the interactive protocol $(P,V)$ by running the simulator $S$,
+the verifier did not actually learn anything from it.
+
+The reason this is 'honset-verifier' is because this definition
+does not catch the case where the verifier 'cheats' and does not
+run the protocol $V$, and might be able to extract information $P$ by doing it.
+
+
+\subsection*{$ZKP$ definition}
+An interactive proof $(P,V)$ is a zero knowlage proof for $L$
+if:
+\[\forall x,V^*,\exists S: View^{P,V^*}(x)\approx S(x)\]
+
+Like to 'similar' from the honest verifier definition,
+'$\approx$' can mean either 'identical' or 'computational indistinguishable';
+with the former being a perfect $ZKP$ and the latter being a statistical $ZKP$. We sometimes denote computational indistinguishability by $X\approx_CY$
+and perfect indistinguishability with $X\approx_PY$.\\
+
+In words, the difference from the honest-verifier zero ZKP is
+that now the simulator should be able to simulate anything that
+ANY verifier protocol manages to extract, meaning that regardless
+of the verifier protocol - no information is extracted.
+
+\subsection*{$HZ-ZKP$ proof for $GI$ protocol above}
+\[
+	View:=(G_0,G_1,G,b,\sigma), G=\sigma(G_b)	
+\]
+Define the following protocol (simulator); on input $G_0, G_1$ do:
+\begin{itemize}
+	\item Sample $\sigma \leftarrow S_n$
+	\item Sample $b\leftarrow \{0,1\}$
+	\item Define $G=\sigma(G_b)$
+	\item return $(G_0, G_1, G, b, \sigma)$
+\end{itemize}
+Now consider each cell in the output tuple of the two distributions ($View$ and $S(G_0,G_1)$),
+$G_0,G_1$ are constant and always the same. $b\sigma$ are sampled uniformly from
+their ranges in both cases.
+So far there is no corralation between the cells.
+$G$ is defined exactly given the rest of the variables meaning
+that since the rest of the variables are the same for both distributions
+$G$ is also the same. Furthermore, since the correlations were identical so far,
+the new correlations are too.
+
+These proofs often (such as in this case) follow the pattern of
+first showing that given a subset of the cells of the distribution tuples
+are the same due to being uniformly sampled respectively ($(G_0,G_1,b,\sigma)$ in this case),
+then showing how the rest of the cells ($G$ in this case)
+are a deterministic function of the other cells,
+and so the addition of these new cells does not impare with the 
+distributions being the same.\\
+Formally, if we have distributions $D_1, D_2$ and a (deterministic) function $f$:
+\[
+	D_1\approx D_2
+	\Rightarrow
+	(D_1, f_{d\leftarrow D_1}(d))\approx (D_2, f_{d\leftarrow D_2}(d))
+\]
+
+\subsection*{$NP\subseteq ZKP$ (proof concept)}
+In the lecture, proof by picture is shown for $3COL\in NPC$
+has a zero knowlage proof. The main course of the proof consists of
+the prover commiting to a spesific permutation of the colors on
+a graph (without showing the verifier what these are), and allowing
+the verifier to choose a sepsific edge and see that indeed
+the coloring on both sides of that edge differ.
+For each iteration a cheating prover has some chance of failing due
+to the verifier haveing a chance to guess an edge where the two sides
+have the same color. Furthermore, the protocol is zero knowlage
+since the actual colors seen in each iteration are just two random colors.

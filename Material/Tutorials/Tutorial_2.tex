@@ -1,4 +1,4 @@
-\section{Perfect Completeness?}
+\section*{Perfect Completeness?}
 We have seen in the lecture how an $IP$ can be reduced to an $AM$ proof, or in other words; a public coin $IP$. Here, we would like to show how any $AM$ can be reduced to an $AM$ with perfect completeness (which is also an $IP$ with perfect completeness).\\
 This means that $\forall L\in IP$, it must have a public coin, perfectly complete interactive proof.\\
 To construct the reduction, we start with the following $z$-round public coin protocol ($AM[z]$), which runs on input $X$:
@@ -43,7 +43,7 @@ To start off:
 \]\[
     =Pr_{\bar{s}}[\bigcup_\alpha\left(\forall i: s_i\oplus\alpha\in REJ\right)]
 %\]\[
-%    =Pr_{\alpha_1, \alpha_2,...,\alpha_k\leftarrow \mathbf{U}}[\bigcup_\alpha\left(\forall i: \alpha_i\in REJ\right)]
+%    =Pr_{\alpha_1, \alpha_2,...,\alpha_k\leftarrow \mathbb{U}}[\bigcup_\alpha\left(\forall i: \alpha_i\in REJ\right)]
 \leq 2^{rc}\cdot \epsilon^k
 \]
 From here we can see that for $k$ of at-least $rc$, the probability is less then 1, meaning that the complementory probability is more than 0, meaning :
@@ -52,3 +52,4 @@ From here we can see that for $k$ of at-least $rc$, the probability is less then
 \]
 Completeness is trivial given Lemma 1.\\
 Soundness of the protocol can be found in notes of Tutorial 2 in the website.
+
