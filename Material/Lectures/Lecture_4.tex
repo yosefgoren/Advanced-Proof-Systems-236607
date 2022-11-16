@@ -24,4 +24,65 @@ Lemma: for every $3-CNF$ formula $\phi$ on $m$ clauses and a finite field $\math
 there exists a ploynomial $p:\mathbb{F}^n\rightarrow\mathbb{F}$ with degree $O(m)$ s.t.
 $\phi=p$.\\
 Furthermore, given $\phi$ and $z\in\mathbb{F}^n$, $p(z)$ can be
-evaluated in $poly(n,m,log(|\mathbb{F}|))$ time.
+evaluated in $poly(n,m,log(|\mathbb{F}|))$ time.\\
+
+Given the lemma, we can esaly solve $3-CNF$, by constructing the
+appropriate polynomial $p$, and evaluating the sum of the polynomial:
+and checking if the sum is $0$.
+
+\subsection*{$IP$ for the sumcheck problem}
+We will show that the sumcheck problem is in $IP$ by the following protocol
+on the inputs $Q:\mathbb{F}^n\rightarrow\mathbb{F}$, $\alpha\in\mathbb{F}$:
+\begin{itemize}
+	\item $P$ defines $Q_1:\mathbb{F}\rightarrow \mathbb{F}$ as
+	\[
+		Q_1(\lambda)=\sum_{x_2,x_3,...,x_n\in\{0,1\}}Q(\lambda,x_2,x_3,...,x_n)
+	\]
+	And sends it as $\hat{Q}_0$.
+	\item $V$ rejects if $\hat{Q}_0(0)+\hat{Q}_0(1)\neq \alpha$.
+	\item for $i\in[n]$:
+	\begin{itemize}
+		\item  $V$ samples $r_i\leftarrow \mathbb{F}$ and sends it.
+		\item $P$ defines:
+		\[Q_i(\lambda)
+		=\sum_{x_{i+2},x_{i+3},...x_n\in\{0,1\}}(r_1,...,r_i,\lambda ,x_{i+1},...x_n)\]
+		And sends it as $\hat{Q}_i$.
+		\item $V$ rejects if $\hat{Q}_{i}(0)+Q(1)\neq\hat{Q}_{i-1}(r_i)$
+	\end{itemize}
+	\item $V$ accepts.
+\end{itemize}
+
+\underline{Completness:}
+Here we know that: $\sum_xQ(x)=\alpha$. So we can write:
+\[
+	\hat{Q}_1(0)+\hat{Q}_1(1)=\hat{Q}_1(0)+\hat{Q}_1(1)
+	=\sum_{x_2,x_3,...,x_n}Q(0,x_2,x_3,...,x_n)+\sum_{x_2,x_3,...,x_n}Q(1,x_2,x_3,...,x_n)
+\]\[
+	=\sum_xQ(x)=\alpha
+\]
+Thus first check passes. Additionally:
+\[
+	\hat{Q}_1(r_1)+\hat{Q}_1(r_1)
+	=\sum_{x_2,x_3,...,x_n}Q(r_1,x_2,x_3,...,x_n)
+\]
+By induction appect w.p. 1.\\
+
+\underline{Soundness:}
+Assume $\sum_x\neq\alpha$ and let $P^*$ be a cheating prover.\\
+WLOG $P^*$ always sends $\hat{Q}_1\neq Q_1$.\\
+Observe that $Q_1$ and $\hat{Q}_1$ are polynomials of degree $d$
+so with all but a probability of $\frac{d}{|\mathbb{F}|}$ - we we have $Q_1(r_1)\neq \hat{Q}_1(r_1)$.\\
+Assume $Q_1(r_1)\neq \hat{Q}_1(r_1)$, thus:
+\[
+	\hat{Q}_1(r_1)\neq\sum_{x_2,x_3,...,x_n}Q(r_1,x_2,x_3,...,x_n)	
+\]
+
+\[
+	Pr[V \texttt{ accepts}]\leq 
+	Pr[Q_1(r_1)=\hat{Q}_1(r_1)]
+	+Pr[V_{n-1} \texttt{ accepts}\mid Q_1(r_1)=\hat{Q}_1(r_1)]
+\]\[
+	\leq \frac{d}{|\mathbb{F}|}
+	+\frac{d\cdot(n-1)}{|\mathbb{F}|}
+	=\frac{d\cdot n}{|\mathbb{F}|}
+\]

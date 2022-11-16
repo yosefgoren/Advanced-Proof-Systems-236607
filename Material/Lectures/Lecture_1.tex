@@ -50,12 +50,17 @@ Proof:
     \item Soundness: Let $x\in L, P^*$. We will show that $Pr[(P^*, V^k)(x)=1]\leq 2^{-k}$.
     Denote by $E_i$ the event that $V^k$ accepts in the $i$'th iteration. Thus:
     \[
-        Pr[E_1\wedge E_2\wedge\dots E_k]=\prod_{i=1}^kPr[E_i|E_1\wedge E_2\wedge\dots E_k]
+        Pr[E_1\wedge E_2\wedge\dots E_k]=\prod_{i=1}^kPr[E_i|E_1\wedge E_2\wedge\dots E_{i-1}]
     \]
-    Claim: $Pr[E_i|E_1\wedge E_2\wedge\dots E_k]\leq 0.5$.\\
-    Proof: Assume toward a contradiction that $Pr[E_i|E_1\wedge E_2\wedge\dots E_k]>0.5$
+    Claim: $Pr[E_i|E_1\wedge E_2\wedge\dots E_{i-1}]\leq 0.5$.\\
+    Proof: Assume toward a contradiction that $Pr[E_i|E_1\wedge E_2\wedge\dots E_{i-1}]>0.5$
     We design a prover $P^{**}$ that convinces $V$ with up to $>0.5$:\\
-    $P^{**}$ emulates $(P^*, V)$ for iterations $1...i-1$ until the event $E_1\wedge E_2\wedge\dots E_k$ happens and then runs $(P^*,V)$ as the $i$'th iteration. Since the run of $(P^*,V)$ for the $i$'th iteration only happens under the condition $Pr[E_i|E_1\wedge E_2\wedge\dots E_k]$ - the probability for $(P^*,V)$ to happen on the $i$'th iteration is exactly $Pr[E_i|E_1\wedge E_2\wedge\dots E_k]>0.5$ but this is also the probability for $Pr[(P^{**},V)(x)=1]$. Contradiction.\\
+    $P^{**}$ emulates $(P^*, V)$ for iterations $1...i-1$ until the event
+    $E_1\wedge E_2\wedge\dots E_{i-1}$ happens and then runs $(P^*,V)$ as the $i$'th iteration.
+    Since the run of $(P^*,V)$ for the $i$'th iteration only happens under the condition
+    $Pr[E_i|E_1\wedge E_2\wedge\dots E_{i-1}]$ - the probability for $(P^*,V)$
+    to happen on the $i$'th iteration is exactly $Pr[E_i|E_1\wedge E_2\wedge\dots E_{i-1}]>0.5$
+    but this is also the probability for $Pr[(P^{**},V)(x)=1]$. Contradiction.\\
     
     Thus:
     \[
