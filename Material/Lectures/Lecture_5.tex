@@ -1,0 +1,109 @@
+\section*{Reminder}
+\underline{Lemma (sumcheck):}\\
+There exists an IP between $P$ and $V$ where $P$
+gets as input a polynomial $Q:\mathbb{F}^n\rightarrow\mathbb{F}$,
+of individual degree $d$ and a value $\alpha\in\mathbb{F}$
+and $V$ gets 'oracle access' to $Q$ and $\alpha$ explicitly.
+
+\begin{itemize}
+	\item Completeness:
+	\[\left[
+		\sum_{x\in\{0,1\}^n}Q(x)=\alpha
+	\right]
+	\Rightarrow V \texttt{ accepts w.p. }1\]
+	\item Soundness:
+	\[\left[
+		\sum_{x\in\{0,1\}^n}Q(x)\neq\alpha
+	\right]
+	\Rightarrow\left[
+		\forall P^*, Pr[V \texttt{ accepts with }P^*]\leq\frac{nd}{|\mathbb{F}|}
+	\right]\]
+\end{itemize}
+
+\underline{Lemma:}
+For every $3CNF; \phi:\onz^n\rightarrow\onz^n$
+on $m$ clauses and field $\fld$ %TODO: complete the lemma from picture taken of board.
+
+\section*{Probobalistically Checkable Proofs - $PCP$}
+\subsection*{Definition}
+We say that a $PPT$ machine $V$ is a $PCP$ verifier
+for $L$ if:
+\begin{enumerate}
+	\item Completeness:
+	\[
+		\left[x\in L\right]
+		\Rightarrow \exists\pi: Pr[V^\pi(x)=1]=1
+	\]
+	\item Soundness:
+	\[
+		\left[x\notin L\right]
+		\Rightarrow \forall\pi^*: Pr[V^{\pi^*}(x)=1]\leq\frac{1}{2}
+	\]
+	\item Parameters:
+	\begin{itemize}
+		\item Query complexity - number of queries to $\pi$, denoted with $q$.
+		\item Proof length - $|\pi|$, denoted with $l$.
+		\item Randomness length - number of random bits sampled by the verifier, denoted with $r$.
+	\end{itemize}
+\end{enumerate}
+We denote $PCP(q,r)$ the class of languages
+with $PCP$ with query complexity $q$ and randomness length $r$.
+
+\subsection*{Initial Properties \& Conclusions}
+\begin{enumerate}
+	\item
+	Claim: $l\leq q\cdot 2^r$
+	\item 
+	Claim: $NP\subseteq PCP(poly, 0)$, more formally:
+	\[
+		NP\subseteq \bigcup_{p\in poly}PCP(p,0)	
+	\]
+	\item
+	Claim: if $L$ has an interactive proof in which each prover/verifier message has length $a/b$ respectively.
+	and with $k$ rounds, then $L$ has a $PCP$
+	with length $a\cdot 2^{kb}$ and query complexity $a\cdot k$.
+	\item
+	Claim: $PCP(q,r)$ has $NP$ proof of length $q\cdot 2^r$.
+\end{enumerate}
+3. results with that any $L\in PSPACE$ has a proof
+of exponential length that can be checked by a polynomial verifier, with a polynomial
+number of queries.
+
+\section*{PCP theorem: $NP = PCP(O(1), O(log(n)))$}
+We will see the proof of this claim in a few steps:
+\begin{itemize}
+	\item $NP \subseteq PCP(O(1), poly(n))$
+	\item $NP\subseteq PCP(O(log(n)^2), O(log(n)))$
+	\item Combining the two claims above to get the theorem.
+\end{itemize}
+
+\subsection*{Hardness of Approxiamtion (Application)}
+$GapSAT_\epsilon$: Accept satisfiable $CNF$ formulas,
+and reject formulas s.t. every assignment satisfies at most $\epsilon$ clauses.
+(here $\epsilon \in[0,1]$ is the proportion of clauses satisfied).\\
+
+\underline{Theorem:}\\
+\[
+	\exists\epsilon >0: GapSAT_\epsilon\in NPC
+\]
+\underline{Proof:}\\
+Let $L\in NP$.\\
+Given $x\in\onz^n$, if $x\in L$,
+there exists a $PCP$ proof $\pi$ for $x$ (The PCP theorem).\\
+
+For a given $x, p$ and $V_{PCP}$, define $V_{x,p}:\onz^q\rightarrow\onz$
+as follows:\\
+There exists a CNF computing $V_{x,p}$ with $2^q$ clauses.\\
+Consider the following CNF:
+$
+	\bigwedge_{p}V_{x,p}
+$
+\begin{itemize}
+	\item if $x\in L$, it is easy to see that $V_{x,p}$ is satisfied.
+	\item 
+	if $x\notin L$ for any assignment $\pi$ for half of $p$'s $V_{x,p}(\pi)=0$
+	so overall, at-least $\frac{1}{2}\frac{1}{2^q}$ of the clauses 
+	are not satisfied.
+\end{itemize}
+With $\epsilon=1-\frac{1}{2^{q+1}}$, we have that
+$L\in GapSAT_\epsilon$.
