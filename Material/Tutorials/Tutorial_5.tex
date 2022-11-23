@@ -1,0 +1,96 @@
+\section*{Error-Correcting Codes (ECC)}
+\subsection*{Motivation}
+The purpose of error correcting codes is
+to handle systems where information is passed through
+a noisy channel, some information needs to be 
+written and read from a medium, but there 
+there is no guarenteed that the information
+will be read exactly as written - rather, the
+are some weaker guarentees about the amount of
+errors or changes that can occur between the information
+that is written and the information that is read.
+
+\subsection*{Introduction}
+A simple solution to enable correcting errors would
+be to repeat the written message multiple times - for example,
+write the input 3 times, and if there is a conflict on
+some bit - choose the majority.\\
+It is easy to see how any single bit error 
+can be corrected by this method.\\
+
+\subsection*{Parameters for ECC}
+For an error correction code $C:\fld^k\rightarrow\fld^n$
+\begin{enumerate}
+	\item Rate: $\frac{n}{k}$ (redundency $n-k$)
+	\item Minimal Distance:
+	\[
+		min_{m_1\neq m_2}\Delta\left(C(m_1),C(m_2)\right)
+	\]\[
+		hw(x)=|\{i|x_i\neq 0\}|, 
+		\Delta(x,y) = hw(x-y)	
+	\]
+\end{enumerate}
+
+\subsection*{Linear Codes}
+If $C:\fld^k\rightarrow\fld^n$ is a linear function, meaning:
+\[
+	\forall m_1,m_2\in\fld^k, \forall \alpha,\beta:	
+	C(\alpha\cdot m_1+\beta\cdot m_2)=\alpha\cdot C(m_1)+\beta\cdot C(m_2)
+\]
+Then we get the following conclusions:
+\begin{itemize}
+	\item $C(0)=0$.\\
+	Easy to prove by adding 0 to the argument of $C$.
+	\item $d=min_{m\in\fld^k\setminus\{0\}}C(m)$.\\
+	Proof:
+	\begin{enumerate}
+		\item 
+		\[
+			d=min_{m_1\neq m_2}\Delta (C(m_1), C(m_2))
+			=min_{m_1\neq m_2}hw(C(m_1)-C(m_2))
+		\]\[
+			=min_{m_1\neq m_2}hw(C(m_1-m_2))
+			\leq min_{m\neq 0}hw(C(m))
+		\]
+		\[
+			d\leq min_{m\neq 0} \Delta(C(m), C(0))
+			=min_{m\neq 0}hw(C(m)) 	
+		\]
+	\end{enumerate}
+	\item Singlton Bound: $d\leq n-k+1$.\\
+\end{itemize}
+
+\section*{ECC important examples}
+\subsection*{Hadamard Code}
+Let $Had:\onz^k\rightarrow \onz^{2^k}$ where:
+\[
+	\forall m\in \onz^k: Had(m)_i=<m,i>	
+\]
+Then get get:
+\begin{enumerate}
+	\item Rate: $\frac{n}{k}=\frac{2^k}{k}$
+	\item Absolute distance: $\frac{2^k}{2}$.\\
+	Proof: $\frac{d}{n}$ of $Had$ is $\frac{1}{2}$.\\
+	Claim: if $m\in\onz^k\setminus\{\overline{0}\}$ then
+	\[
+		Pr_{x\in\onz^k}[<m,x>=0]
+		=Pr_{x\in\onz^k}[<m,x>=1]
+		=\frac{1}{2}	
+	\]
+	Let $m\in\onz^k\setminus\{\overline{0}\}$,
+	by claim from HW1, exactly half of the bits of $Had(m)$
+	are $1$, and thus - $hw(Had(m))=\frac{1}{2}\cdot 2^k$
+\end{enumerate}
+
+\subsection*{Read-Solomon Codes}
+Presume we map each input
+to a polynomial: 
+$m\longrightarrow \fld^k[x]$.\\
+And let $m_1\neq m_2\longrightarrow p_1\neq p_2$.\\
+Thus $p_1, p_2$ agree on at most $k-1$ points in $\fld^k$.\\
+
+\[
+	RS(m)=p(\alpha_1), p(\alpha_2), \dots, p(\alpha_n)	
+	\Rightarrow d=n-k+1
+\]
+
