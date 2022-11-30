@@ -1,0 +1,167 @@
+\section*{$NP\subseteq PCP(O(1),Poly(n))$ - cont.}
+Hadamard Code: $Had:\{0,1\}^n\rightarrow \{0,1\}^n$, Relative distance $\frac{1}{2}$.\\
+
+\subsection*{Hadamard $PCP$}
+Quadratic Equations: $GF(2)$.\\
+$n$-variables, $m$-equations:
+\[
+	x_1x_2+x_7+x_{19}x_1=1
+\]\[
+	x_2+x_{38}x_{19}=0	
+\]
+Each such equation can be described by $a\in\onz^{n^2}$ for the
+coeeficiants of $x_i$'s. So the whole set of equations
+can be described with a matrix $A\in\onz^{n^2\times m}$ for
+all equations and $b\in\onz^m$ for the constant terms.\\
+
+Now given such $A$ and $b$, consider the problem of deciding:
+\[
+	\exists u\in\onz^n A(u\otimes u)=b	
+\]
+Where here $\otimes$ denotes the open product:
+\[
+	u\otimes u=\begin{matrix}
+		u_1u_1&u_1u_2&\dots&u_1u_n\\
+		u_2u_1&u_2u_2&\dots&u_2u_n\\
+		\vdots&\vdots&\ddots&\vdots\\
+		u_nu_1&u_nu_2&\dots&u_nu_n
+	\end{matrix}
+\]
+
+\subsection*{Verifier sketch}
+Now we can define a Hadamard $PCP$ verifier for this problem:\\
+The $PCP$ proof string: given $u\in\onz^n$ s.t. $A(u\otimes u)=b$,
+a proof is $(Had(u)\in\onz^{2^n}, Had(u\otimes u)\in\onz^{2^{n^2}})$.\\
+
+Given $A,b$ we want to check the following:
+\begin{enumerate}
+	\item The proof string consists of some $(Had(u),Had(U))$.
+	\item Check $U=u\otimes u$.
+	\item $A\cdot U = b$.
+\end{enumerate}
+
+\subsection*{Checking 2}:\\
+To start off, we will show how 2 can be verified:\\
+For that end, consider the following indentity:\\
+$\forall a,b,c,d\in\fld^n$:
+\[
+	<a\otimes b, c\otimes d>
+	=\sum_{i,j}a_ib_jc_id_j
+	=\sum_ia_ic_i\sum_jb_jd_j
+	=<a,c>\cdot<b,d>
+\]
+Now consider it with $u, r, s$:\\
+\[
+	<u\otimes u, r\otimes s>
+	=<u,r>\cdot<u,s>
+\]
+
+Moreover, for the purposes of our verifier,
+we know that if 2 is satisfied, the following
+identity should be satisfied (Soundness):
+\[
+	<U, r\otimes s>
+	=<u,r>\cdot<u,s>
+\]
+And if $\forall r,s\in\onz^n$ we have the identity - then
+2 must be satisfied (Completness).\\
+
+So to check $2$, our verifier will choose $r,s\in\onz^n$
+and test \[
+	<U, r\otimes s>
+	=<u,r>\cdot<u,s>
+\]
+
+Formally;
+\begin{itemize}
+	\item Soundness: let $U\neq u\otimes u$.
+	\[
+		\pr_{r,s}[<U,r\otimes s>=<u,r>\cdot<u,s>]	
+		=\pr_{r,s}[<U,r\otimes s>=<u\otimes u, r\otimes s>]
+	\]\[
+		=\pr_{r,s}[<u-u\otimes u, r\otimes s>=0]\leq_* \frac{3}{4}
+	\]
+	To understand *, we can see that for any $A\neq 0$,
+	the probability that $r\in\onz^n$ is $0$ is negligable,
+	thus $r^TA\neq 0$ and so $r^tAs$ is a multiplication
+	between a non-zero matrix and a uniformly sampled vector - which
+	is also uniformly distributed. Hence:
+	\[
+		\pr_{r,s}[<A,r\otimes s>=0]
+		=\pr_{r,s}[r^tAs=0]
+		=1-\pr_{r,s}[r^tAs\neq 0]
+	\]\[
+		=1-\pr_{r,s}[r^tA\neq 0]\cdot \pr_{r,s}[(r^tA)s\neq 0\mid r^tA\neq 0]
+		=1-\frac{1}{2}\cdot\frac{1}{2}
+	\]
+\end{itemize}
+
+\subsection*{Checking 3}:\\
+Let $r\in\onz^m$ Consider:
+\[
+	<r^TA,u\otimes u>=r^Tb
+	\Leftrightarrow
+	r^TA\cdot(u\otimes u)=r^Tb
+\]
+if $A\cdot u\otimes u=b$ then 1 is satisfied (perfect completness).\\
+if $A(u\otimes u)\neq b$ then (soundness):
+\[
+	\pr_r[r^TA\cdot(u\otimes u)=r^Tb]
+	=\pr_r[r^T(A\cdot u\otimes u-b)=0]=\frac{1}{2}=\frac{3}{4}	
+\] 
+
+\subsection*{Checking 1}:\\
+To check 1, we start off by showing a theorem.\\
+\underline{Theorem (Linearity Testing):}\\
+There exists a probobalistic algorithm $A$ that
+takes $O(1)$ quaries to a function $f:\onz^n\rightarrow \onz$ and:
+\begin{enumerate}[label=(\alph*)]
+	\item if $f$ is linear then $A$ accpets w.p. $1$.
+	\item if $\Delta(f,L_{lin-n})\geq 0.01$ then $A$ accepts w.p. $\leq \frac{1}{2}$.
+\end{enumerate}
+
+\underline{Proof:}\\
+Definition 1: $f:\onz^n\rightarrow \onz$ is
+linear if $\exists c\in\onz^n$ s.t. $f(x)=<c,x>$.\\
+Definition 2: $f:\onz^n\rightarrow \onz$ is
+linear if $\forall x,y: f(x+y)=f(x)+f(y)$.\\
+Now we show that the two definitions are equivalent:\\
+\begin{itemize}
+	\item $1\Rightarrow 2:$
+	Let $f:\onz^n\rightarrow \onz$ for which  $\exists c\in\onz^n$ s.t. $f(x)=<c,x>$.\\
+	\[
+		f(x+y)=<c,x+y>=<c,x>+<c,y>=f(x)+f(y)	
+	\]
+	\item $2\Rightarrow 1:$
+	Let $f:\onz^n\rightarrow \onz$ for which $\forall x,y: f(x+y)=f(x)+f(y)$.\\
+	\[
+		f(x)=f(\sum_{i=1}^n x_i\bar{e}_i)=\sum_{i=1}^n f(x_i\bar{e}_i)
+		=\sum_{i=1}^n f(x_ie_i)
+		=\sum_{i=1}^nx_if(e_i)%TODO: complete this...
+	\]
+\end{itemize}
+
+\underline{Lemma:}\\
+\[
+	\Delta(f,L_{lin-n})>\delta
+	\Rightarrow \pr_{x,y}[f(x+y)\neq f(x)+f(y)]>1-\delta
+\]
+
+\underline{Fourier Analysis:}\\
+\[
+	\onz\rightarrow \{1,-1\}, b\rightarrow (-1)^b
+\]\[
+	f:\onz^n\rightarrow \onz, g:\{1,-1\}^n\rightarrow \{1,-1\}
+\]
+$f$ is linear iff $g(x)=\prod_{i\in s}x_i$, 
+(because mapping is homomorphism).
+
+\subsection*{Forurier Analysis Crash Course:}
+Consider the set of functions: $g:\{1,-1\}^n\Rightarrow\mathbb{R}$.\\
+This set is a vector space over $\mathbb{R}$.\\
+A basis for this vector space is the \emph{Fourier Basis} $\{g_1,g_2,...,g_n\}$.
+$g_i(x)$ can be calculated as follows:\\
+let $b_0,b_1,...,b_{n-1}$ be the binary representation of $i$.\\
+\[
+	g_i(x)=\prod_{j=0}^{n-1}x_j^{b_j}
+\]
