@@ -1,0 +1,76 @@
+\section*{Error Correcting Codes - cont.}
+\subsection*{Locally Testable Codes}
+\underline{Goal:}
+Given $\pi\in\onz^n$, we want to decide if
+$\exists x: C(x)=\pi$.\\
+Moreover, we are interested in doing so
+while only reading a fraction of $x$'s bits.\\
+Doing so exactly, is impossible due to 
+the ability of an adveresery to change a single random
+bit from a correct value.\\
+
+\underline{Relaxed Requirment:}
+\begin{enumerate}
+	\item if $\exists x: C(x)=\pi$ accept.
+	\item reject if $\pi$ is $\delta$-far from $C$.
+\end{enumerate}
+
+
+Distance from code:
+\[
+	\Delta(\pi,C)=\min_x\Delta(\pi,C(x))
+	\Rightarrow \pi \text{ is } \delta-\text{far from } C: \Delta(\pi,C)\geq \delta	
+\]\[
+	\Rightarrow \pi \text{ is } \delta-\text{close from } C: \Delta(\pi,C)\leq \delta
+\]
+
+\underline{Definition:}
+$C$ is $q$-local $\delta$-testable if:\\
+$\exists A\in PPT$ s.t.
+given oracle access to $\pi$:
+\begin{enumerate}
+	\item if $\exists x: C(x)=\pi$ then $ A^\pi=1$.
+	\item if $\Delta(\pi, C)>\delta$ then:
+	\[
+		\pr[A^\pi=1]<\frac{1}{2}
+	\]
+	and $A$ makes (up to) $q$ queries to $\pi$.
+\end{enumerate}
+
+\subsection*{Locally Decodable Codes}
+A code that allows us to decode a bit from original message by
+making a small amount of queries even if there's a small
+fraction of corrupted bits.
+
+\underline{Definition:}\\
+a code is $(q,\delta,\epsilon)$-locally decodable if:\\
+$\exists A\in PPT$ that given $i\in[n]$ and oracle access to $\pi$ s.t.\\
+\[
+	\left[\exists x: \Delta(\pi, C(x))\leq \delta\right]
+	\Rightarrow \pr[A^\pi(i)=x_i]\geq 1-\epsilon	
+\]
+and $A$ makes $q$ queries to $\pi$.
+
+\underline{Lemma:}\\
+$Had$ is $()$-locally decodable.
+
+\underline{Proof:}\\
+Show some alg $A^\pi(i)$:
+\begin{enumerate}
+	\item $\beta\leftarrow \onz^k, \gamma =\beta+e_i$\\
+	(where for ex. $e_3=00100...0$ ).
+	\item $\pi_\beta+\pi_\gamma$
+\end{enumerate}
+
+\underline{Correctness:}\\
+let $x: \Delta(C(x),\pi)\leq\delta$.
+\[
+	\pr[A^\pi(i)=x_i]
+	=\pr_\beta[\pi_\beta+\pi_{\beta+e_i}]
+	\geq\pr[\pi_\beta=Had_\beta(x)\wedge \pi_{\beta+e_i}=Had_{\beta+e_i}(x)]
+\]\[
+	\pr[\pi_\beta\neq Had(x)\vee \pi_{\beta+e_i}\neq Had_{\beta+e_i}(x)]
+\]\[
+	\leq \pr[\pi_\beta\neq Had_\beta(x)]+\pr[\pi_\gamma\neq Had_\beta(x)]
+	\leq 2\delta
+\]
