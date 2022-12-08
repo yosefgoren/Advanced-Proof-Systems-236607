@@ -1,0 +1,51 @@
+In this question, for a $PPT$ algorithm $A$
+and $x\in\onz^n,r\in\onz^k$,
+denote $A(x)_{r\leftarrow}$
+to mean the run of the algorithm $A$ on input $x$ where the randomization has sampled
+the bits of $r$, i.e. the first random bit is $r_0$, second is $r_1$ and so on.\\
+
+\underline{\textbf{Construction:}}\\
+Let $L\in NP, x\in\onz^n$.\\
+There exists a polynomial time verifier $V_x$ using $q$ queries and $r$ random bits.\\
+Define the following graph $G_x=(U_x,E_x)$:
+\[
+    U_x=\{(w,p)\mid V_x(w)_{p\leftarrow}=1\}   
+\]
+\[
+    E_x=\left\{
+        ((w,p),(w',p'))\mid \text{all common queries in } V_x(w)_{\leftarrow p}, V_x(w')_{\leftarrow p'} \text{ have the same awnser.}
+    \right\}    
+\]
+Define our reduction $f(x)=G_x$.\\
+
+\underline{\textbf{Claim:}}\\
+$f$ is a (Karp) reduction from $GapClique_\epsilon$ to $L$.\\
+
+\underline{\textbf{Proof:}}\\
+\begin{itemize}
+    \item \underline{If $x\in L$:}\\
+    Then there exists some $\pi$ s.t. $\pr_{p\leftarrow\onz^r}[V^\pi_x=1]=1$,
+    which means that for any randomly sampled $p$, $V_x^\pi$ will accept so
+    each $p$ sampled is consistent with all other $p$ values. Hence $G_x$ has a clique of
+    size $2^r$ (at-least).\\
+    \item \underline{If $x\notin L$:}\\
+    Assume towards contrediction exists a clique of size $\geq 2^{r-1}$ in $G_x$,
+    This means there is a set $Q$ of at-least $2^{r-1}$ queriest which are all consistent 
+    with one another.\\
+    Now we use the prior to define a proof to convince $V_x$ that $x\in L$:\\
+    At the index $i$, put the result of the query $q$ if $q\in Q$, otherwise put $0$.\\
+    Since we know that at-least $2^{r-1}$ ranzomizations of $p$ yield
+    queries that are consistent with the ones resulted in $\pi^*$, we have that:
+    \[
+        \pr_p[V_x^{\pi^*}=1]\geq \frac{2^{r-1}}{2^r}=\frac{1}{2}
+    \]
+    But this is a contredition to the soundness if $V_x$,
+    meaning no such clique exists and $G_x\notin GapClique_\epsilon$.\\
+    \item \underline{Efficiency:}\\
+    Thanks to the $PCP$ theorem - we know that: $NP=PCP(O(1),O(log(n)))$.\\
+    Thus there exists such $PCP$ verifier $V_x$, that will yield a graph $G_x$ with
+    a polynomial (in $n$) number of vertices, So the graph $G_x$
+    can be constructed efficiantly, which means that the reduction $f$ is polynomial.
+\end{itemize}
+We have seen the correctness of the reduction. Since $L$ is an arbitrary language in $NP$,
+we can conclude that $GapClique_\epsilon$ is $NP$-hard.

@@ -89,4 +89,85 @@ So:
     =\pr_x[U(x)=0]=\frac{d}{F}
 \]
 
-\subsection{All-Zero Check with Small FIeld}
+\subsection{All-Zero Check with small Field}
+Let $\fld$ be a finite field.\\
+Define:
+\[
+    I_1(x,x')=1-x-x'+x\cdot x'+x\cdot x'
+\]  
+For any $n\in\mathbb{N}\setminus\{0,1\}$, define:
+\[
+    I_n(x,x')=
+    \prod_{i\in[n]}I_1(x_i,x_i')
+\]
+For any polynomial $Q:\fld^n\rightarrow\fld$ and $z\in\fld$, Define:
+\[
+    Q_z(x):=Q(x)\cdot I_n(x,z), S_{Q,z}(x)=\sum_{x\in\onz^n}Q_z(x)
+\]
+Let $Q$ be the zero polynomial and $x,z\in\fld$,
+then (*):
+\[
+    Q_z(x)=Q(x)\cdot I_n(x,z)=0
+    \Rightarrow S_{Q,z}(x)=0
+\] 
+Also, note how $S_{Q,z}$ is a polynomial of individual degree $1$, and total degree $n$,
+therefore, for any nonzero $Q$ and $z\in\fld$,
+we can use the polynomial identity lemma to get (**):
+\[
+    \pr_{x\leftarrow\fld^n}\left[S_{Q,z}(x)=0\right]\leq\frac{n}{|\fld|}
+\]
+
+
+\underline{\textbf{Interactive Protocol:}}\\
+Define our interactive protocol to be the sumcheck
+protocol seen in class, with $\alpha = 0$
+and applied on the $Q_z$ polynomial where $z$ 
+is uniformly sampled from $\fld$.\\
+
+\underline{\textbf{Completeness:}}\\
+Let $Q$ be the zero polynomial and consider a specific run of $(P,V)(Q)$.\\
+Let $z$ be the value sampled by $V$.\\
+Due to (*), $S_{Q,z}(x)=0$ for all $x\in\fld^n$,
+thus, due to the completness of the sumcheck protocol -
+$V$ will accept.\\
+
+\underline{\textbf{Soundness:}}\\
+Let $P^*$ be a (possibly) mallicious prover, $Q$ be a nonzero polynomial and consider a specific run of $(P^*,V)(Q)$.\\
+Denote $z$ to be the value sampled by $V$.\\
+
+Consider the soundness error of the sumcheck protocol
+given the arguments provided to it here; since $Q_z$ has
+an individual degree of at most $d+1$, it will be $\frac{(d+1)n}{|\fld|}$ (***).\\
+
+Thus:
+\[
+    \pr\left[(P^*,V)(Q)=1\right]
+\]
+\[
+    =\pr\left[(P^*,V)(Q)=1\mid S_{Q,z}(x)=0\right]\cdot\pr\left[S_{Q,z}(x)=0\right]
+\]
+\[
+    +\pr\left[(P^*,V)(Q)=1\mid S_{Q,z}(x)\neq 0\right]\cdot\pr\left[S_{Q,z}(x)\neq 0\right]
+\]
+\[
+    =_{V def.}1\cdot\pr\left[S_{Q,z}(x)=0\right]
+    +\pr\left[(P^*,V)(Q)=1\mid S_{Q,z}(x)\neq 0\right]\cdot\pr\left[S_{Q,z}(x)\neq 0\right]
+\]
+\[
+    \leq_{(**),(***)}1\cdot\frac{n}{|\fld|}
+    +\frac{n(d+1)}{|\fld|}\cdot \pr\left[S_{Q,z}(x)\neq 0\right]
+\]
+\[
+    \leq_{\pr[\cdot]\leq 1}\frac{n}{|\fld|}
+    +\frac{n(d+1)}{|\fld|}=O\left(\frac{n\cdot d}{|\fld|}\right)
+\]
+
+\underline{\textbf{Complexity:}}\\
+As we have seen in class, running the sumcheck verifier is with complexity
+$poly(n,d,log(|\fld|))$, and sampling a random element $z$
+is also within those bounds. Hence the total runtime of our verifer 
+is $poly(n,d,log(|\fld|))$.\\
+
+Additionally, since our verifier does not make additional queries to $Q$ other 
+then the ones done by the sumcheck verifier - only one query to $Q$ is made.
+
