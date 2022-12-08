@@ -1,0 +1,92 @@
+\subsection{Polynomial Identity Lemma}
+\underline{\textbf{Proof of lemma:}}\\
+The multivariate polynomial degree as stated in the question (*):
+\[
+    Deg\left(\sum_{i=1}^m\prod_{i=j}^nx_j^{d_{i,j}}\right) = \max\biggl\{\sum_{j=1}^nd_{i,j}\mid i\in[n]\biggl\}
+\]
+
+Proof by induction.\\
+Induction basis is immidiate from the fundemental theorem of algebra.\\
+
+Assume for every nonzero $P=\sum_{i=1}^m\prod_{i=j}^nx_j^{d_{i,j}}$:
+\[
+    \pr_{x_1,...,x_{n-1}\in\mathbb{F}}\left[
+        P(x_1,...,x_{n-1})=0
+    \right]
+    \leq \frac{Deg(P)}{|\mathbb{F}|}
+\]
+
+Let $P\in\mathbb{F}[x_1, x_2, ..., x_n]$ be a nonzero polynomial.\\
+Denote $d=Deg(P)$.\\
+By treating all $\{x_i\}_{i=1}^{}n-1$ as constants, $P$ can be described as a univariate polynomial in $x_n$:
+\[P(x_1, x_2, ..., x_n)=\sum_{i=0}^dx_n^i\cdot P_i(x_1,...,x_{n-1})\]
+Since $P$ is nonzero:
+\[
+    \exists i: P_i(x_1,...,x_{n-1})\neq 0
+\]
+Let: $k=\max\{i\mid P_i \neq 0\}$.\\
+From (*): 
+\[
+    Deg(x_n^k\cdot P_k)=k+Deg(P_k)\leq Deg(P)=d
+\]\[
+    \Rightarrow Deg(P_k)\leq d-k
+\]
+Let $\{y_i\}_{i=1}^{n-1}\leftarrow^\$ \mathbb{F}^{n-1}$ and $x_n\leftarrow \mathbb{F}$ (sampled uniformly).\\
+Define the occurances:
+\begin{itemize}
+    \item $SubRoot$: $P_k(y_1,...,y_{n-1})=0$
+    \item $Root$: $P(y_1,...,y_{n-1},x_n)=0$
+\end{itemize}
+We are interested in showing that: $\pr[Root]\leq\frac{d}{|\mathbb{F}|}$.\\
+
+From the induction assumption:
+\[
+    \pr[SubRoot]=\pr\left[P_k(y_1,...,y_{n-1})=0\right]
+    \leq \frac{Deg(P_k)}{|\mathbb{F}|}
+    \leq \frac{d-k}{|\mathbb{F}|}
+\]
+Define $P'(x_n)=P(y_1,...,y_{n-1},x_n)$, note that $P'(x_n)=0$ is equivalent to $Root$.\\
+Assuming $\overline{SubRoot}$, $P'(x_n)$ is a univariate polynomial in $x_n$ of degree $k$.\\
+Thus from the fundemental theorem of algebra:
+\[
+    \pr_{x_n\leftarrow \mathbb{F}}\left[P'(x_n)=0\right]
+    \leq \frac{k}{|\mathbb{F}|}
+\]
+    In other words:
+\[
+    \pr[Root\mid \overline{SubRoot}]
+    =\pr\left[P'(x_n)=0
+    \mid \overline{SubRoot}\right]
+    \leq \frac{k}{|\mathbb{F}|}    
+\]
+Now denote the case $Root$ to be the case where $P(y_1,...,y_{n-1}, x_n)=0$.\\
+Denote $Root, SubRoot$ as $R,S$ for ease of notation, and we finally have:
+\[
+    \pr[R]=\pr[R\mid S]\cdot\pr[S]+\pr[R\mid \bar{S}]\cdot\pr[\bar{S}]
+    \leq \pr[S]+\pr[R\mid \bar{S}]\leq \frac{d-k}{|\mathbb{F}|}+\frac{k}{|\mathbb{F}|}= \frac{d}{|\mathbb{F}|}
+\]\[
+    \Rightarrow \pr[R]\leq \frac{d}{|\mathbb{F}|}
+    \Rightarrow \pr[P(y_1,...,y_{n-1},x_n)=0]\leq \frac{d}{|\mathbb{F}|}
+\]
+
+\underline{\textbf{Tightness:}}\\
+Let $n\in\mathbb{N}, d\leq|\mathbb{F}|-1$.\\
+We are interested in showing a polynomial for which the probability
+of begin zero is exactly $\frac{d}{|\mathbb{F}|}$.\\
+Denote $F:=|\mathbb{F}|$, $\{a_1,a_2,...,a_F\}:=\mathbb{F}$.\\
+Define:
+\[
+    U(x):=\prod_{i=1}^d(x-a_i)    
+\]
+\[
+    P(x_1,...,x_n):=U(x_n)    
+\]
+For each $a_i$, $U(a_i)=0\cdot\prod(\dots)$ thus each $a_i$ is a root of $U$,
+additionally, if $U$'s argument $x$ is not $a_i$, then $U(x)$ is a product of nonzeros and thus $U(x)$ is nonzero.\\
+So:
+\[
+    \pr_{x_1,...,x_n}[P(x_1,...,x_n)=0]=\pr_{x_n\leftarrow \mathbb{F}}[U(x_n)=0]
+    =\pr_x[U(x)=0]=\frac{d}{F}
+\]
+
+\subsection{All-Zero Check with Small FIeld}

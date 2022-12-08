@@ -1,0 +1,66 @@
+\documentclass{article}
+% basics
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{hyperref} 
+\usepackage[labelfont=bf]{caption}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}{Corollary}[theorem]
+
+% unique math expressions:  
+\usepackage{amsmath}
+\DeclareMathOperator*{\andloop}{\wedge}
+\DeclareMathOperator*{\pr}{Pr}
+\DeclareMathOperator*{\approach}{\longrightarrow}
+\DeclareMathOperator*{\eq}{=}
+
+% grey paper
+\usepackage{xcolor}
+% \pagecolor[rgb]{0.11,0.11,0.11}
+% \color{white}
+
+
+\newcommand{\fld}[0]{\mathbb{F}}
+\newcommand{\onz}[0]{\{0,1\}}
+
+% embedded code sections
+\usepackage{listings}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\lstdefinestyle{mystyle}{
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\begin{document}
+\author{Yosef Goren}
+\title{Advanced Proof Systems - Homework 2}
+\maketitle
+% \section{Better All-Zero Check}
+% \input{question1.tex}
+% \section{Better All-Zero Check}
+% \input{question1.tex}
+\section{Random Linear Codes (Gilbert-Varshamov Bound)}
+\input{question3.tex}
+
+\end{document}
