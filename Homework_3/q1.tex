@@ -1,0 +1,31 @@
+\subsection{}
+
+
+\subsection{}
+Let $V_p$ be a $PCP$ prover with perfect completness, soundness error $\frac{1}{2}$ and $q$ queries.\\
+Define a $2-message$, $MIP$ protocol as follows:
+\begin{itemize}
+    \item $V_m$ (Verifier):\\
+        \begin{itemize}
+            \item Given $x$, ask $V_p$ for it's queries on $x$. Denote these $Q:=\{Q_i\mid i\in[q]\}$\\
+            \item $\forall i\in[q]$ ask $P_i$ for response to $Q_i$. Denote $R:=\{R_i\mid i\in[q]\}$.\\
+            \item Return $R$ to $V_p$.\\
+        \end{itemize}
+    \item $P_i$ (Prover $i$):\\
+        \begin{itemize}
+            \item Given an input $x$, and a query $Q_i$,
+                if $x\in L$, there exists a $PCP$ proof to convince $V_p$, denote it $H$.
+            \item Use $Q_i$ as index in $H$ (as a bolean array), and return $R_i:=H[Q_i]$.
+        \end{itemize}
+\end{itemize}
+\begin{itemize}
+    \item Completness:\\
+        If $x\in L$, then $P_i$ will all return the correct awnser to the
+        query in $H$ (the $PCP$ proof), thus the awnser to $V_p$'s query will be
+        as if it has queried itself like in the original $PCP$ protocol; thus due to the soundness
+        of the $PCP$ protocol, $V_m$ will accept $x$.
+    \item Soundness:
+        Assume $\exists P_1^*,P_2^*,...,P_q^*$ s.t.
+        \[\pr_{r\leftarrow^\$}[(V,P_1^*,...,P_q^*)(x)=1]\geq \frac{1}{2}\]
+        From here we can construct
+\end{itemize}
