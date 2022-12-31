@@ -139,9 +139,14 @@ Define the following $q-prover$ $MIP$ for it:\\
 		
 		Now we use these provers to construct $PCP_x$:\\
 		$PCP_x$ has a section corresponding to each prover $P_i^*$, and in each section - 
-		the $j$'th bit corresponds to the response of $P_i^*$ on query $j$ which
-		is the most probable. If there is more than one most probable response
-		select the minimal one.\\
+		the $j$'th bit corresponds to the response of $P_i^*$ on query $j$ (as we
+		have seen in the course, we can assume WLOG that the provers are determenitic).
+		
+		% Now we use these provers to construct $PCP_x$:\\
+		% $PCP_x$ has a section corresponding to each prover $P_i^*$, and in each section - 
+		% the $j$'th bit corresponds to the response of $P_i^*$ on query $j$ which
+		% is the most probable. If there is more than one most probable response
+		% select the minimal one.\\
 
 		Claim:
 		\[
@@ -151,19 +156,22 @@ Define the following $q-prover$ $MIP$ for it:\\
 		Proof:
 		As a shorthand denote $P_1^*,...,P_q^*$ as $PS^*$.\\
 
-		Denote with $C_{i,j}$ the event that $P_i$ returns the most
-		probable response on query $j$ and $c_{i,j}=\pr[C_{i,j}]$.
-		Since there are only two possible
-		responses (1 and 0) - $c_{i,j}\geq\frac{1}{2}$.\\
+		% Denote with $C_{i,j}$ the event that $P_i$ returns the most
+		% probable response on query $j$ and $c_{i,j}=\pr[C_{i,j}]$.
+		% Since there are only two possible
+		% responses (1 and 0) - $c_{i,j}\geq\frac{1}{2}$.\\
 
 		In the event that $B=0$:\\
-		Let $C:= \bigwedge_{i\in [q]}C_{i,Q_i}$ - meaning the event that
-		all provers were consistent with $PCP_x$. Let $c=\pr[C]$.\\
-		Since we know the provers cannot communicate - the probabilities for their
-		selections are independent. Hence $c=\prod_{i\in [q]}c_{i,Q_i}$.
+		Let $C:= \forall_{i,j\in [q]}b_i=b_j$ - meaning the event that
+		all provers were consistent with one another. Let $c=\pr[C]$.\\
+
+		All bits returned by $PS^*$ are the same ones $V_p$ would
+		get by quering $PCP_x$ thus:
 		\[
 			\pr[(V_m,PS^*)(x)=1\mid B=0]	
+			=\pr[V_p(x, PCP_x)=1]
 		\]
+		
 		\[
 			=\pr[(V_m,PS^*)(x)=1\mid B=0\wedge C]\pr[C]
 			+\pr[(V_m,PS^*)(x)=1\mid B=0\wedge \neg C]\pr[\neg C]
@@ -180,6 +188,30 @@ Define the following $q-prover$ $MIP$ for it:\\
 			\leq c\pr[V_p(x, PCP_x)=1]+(1-c)\cdot 1
 			=1+c(\pr[V_p(x, PCP_x)=1]-1)
 		\]
+		% In the event that $B=0$:\\
+		% Let $C:= \bigwedge_{i\in [q]}C_{i,Q_i}$ - meaning the event that
+		% all provers were consistent with $PCP_x$. Let $c=\pr[C]$.\\
+		% Since we know the provers cannot communicate - the probabilities for their
+		% selections are independent. Hence $c=\prod_{i\in [q]}c_{i,Q_i}$.
+		% \[
+		% 	\pr[(V_m,PS^*)(x)=1\mid B=0]	
+		% \]
+		% \[
+		% 	=\pr[(V_m,PS^*)(x)=1\mid B=0\wedge C]\pr[C]
+		% 	+\pr[(V_m,PS^*)(x)=1\mid B=0\wedge \neg C]\pr[\neg C]
+		% \]
+		% \[
+		% 	=c\pr[(V_m,PS^*)(x)=1\mid B=0\wedge C]
+		% 	+(1-c)\pr[(V_m,PS^*)(x)=1\mid B=0\wedge \neg C]
+		% \]
+		% \[
+		% 	=c\pr[V_p(x, PCP_x)=1]
+		% 	+(1-c)\pr[(V_m,PS^*)(x)=1\mid B=0\wedge \neg C]
+		% \]
+		% \[
+		% 	\leq c\pr[V_p(x, PCP_x)=1]+(1-c)\cdot 1
+		% 	=1+c(\pr[V_p(x, PCP_x)=1]-1)
+		% \]
 
 		In the event that $B=1$:\\
 		Let $C':=\bigwedge_{i\in[q]}C_{i,r}$ and $c':=\pr[C']$.\\
