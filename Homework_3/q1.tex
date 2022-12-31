@@ -143,12 +143,6 @@ Define the following $q-prover$ $MIP$ for it:\\
 		is the most probable. If there is more than one most probable response
 		select the minimal one.\\
 
-		Claim:
-		\[
-			\pr[(V_m,P_1^*,...,P_q^*)(x)=1]
-			\leq \pr[V_p(x, PCP_x)=1]
-		\]
-		Proof:
 		As a shorthand denote $P_1^*,...,P_q^*$ as $PS^*$.\\
 
 		Denote with $C_{i,j}$ the event that $P_i$ returns the most
@@ -160,7 +154,7 @@ Define the following $q-prover$ $MIP$ for it:\\
 		Let $C:= \bigwedge_{i\in [q]}C_{i,Q_i}$ - meaning the event that
 		all provers were consistent with $PCP_x$. Let $c=\pr[C]$.\\
 		Since we know the provers cannot communicate - the probabilities for their
-		selections are independent. Hence $c=\prod_{i\in [q]}c_{i,Q_i}$.
+		selections are independent. Hence $c=\mathbb{E}_Q[\prod_{i\in [q]}c_{i,Q_i}]$.
 		\[
 			\pr[(V_m,PS^*)(x)=1\mid B=0]	
 		\]
@@ -182,21 +176,21 @@ Define the following $q-prover$ $MIP$ for it:\\
 		\]
 
 		In the event that $B=1$:\\
-		Let $C':=\bigwedge_{i\in[q]}C_{i,r}$ and $c':=\pr[C']$.\\
-		Thus $c'=\frac{1}{q}\sum_{r\in[q]}\prod_{i\in[q]}c_{i,r}$.\\
+		Let $C:=\bigwedge_{i\in[q]}C_{i,r}$ and $c':=\pr[C]$.\\
+		Thus $c=\frac{1}{q}\sum_{r\in[q]}\prod_{i\in[q]}c_{i,r}$.\\
 		\[
 			\pr[(V_m,PS^*)(x)=1\mid B=1]
 		\]
 		\[
-			\pr[(V_m,PS^*)(x)=1\mid B=1\wedge C']\pr[C']
-			+\pr[(V_m,PS^*)(x)=1\mid B=1\wedge \neg C']\pr[\neg C']
+			\pr[(V_m,PS^*)(x)=1\mid B=1\wedge C]\pr[C]
+			+\pr[(V_m,PS^*)(x)=1\mid B=1\wedge \neg C]\pr[\neg C]
 		\]
 		\[
-			=c'\pr[(V_m,PS^*)(x)=1\mid B=1\wedge C']
-			+(1-c')\pr[(V_m,PS^*)(x)=1\mid B=1\wedge \neg C']
+			=c\pr[(V_m,PS^*)(x)=1\mid B=1\wedge C]
+			+(1-c)\pr[(V_m,PS^*)(x)=1\mid B=1\wedge \neg C]
 		\]
 		\[
-			=c'\cdot 1+(1-c')\cdot 0=c'
+			=c\cdot 1+(1-c)\cdot 0=c
 		\]
 
 		Thus:
@@ -204,4 +198,9 @@ Define the following $q-prover$ $MIP$ for it:\\
 			\pr[(V_m,PS^*)(x)=1]
 			=\frac{1}{2}\pr[(V_m,PS^*)(x)=1\mid B=0]+\frac{1}{2}\pr[(V_m,PS^*)(x)=1\mid B=1]
 		\]
+		\[
+			\leq \frac{1+c(\pr[V_p(x, PCP_x)=1]-1)}{2}+\frac{c}{2}=\frac{1+\pr[V_p(x, PCP_x)=1]}{2}
+		\]
+
+		Hence since $V_p$ has constant soundness - $V_m$ has constant soundness too.
 \end{itemize}
