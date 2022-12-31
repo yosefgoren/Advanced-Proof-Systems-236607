@@ -1,8 +1,163 @@
 \subsection{A Characterization}
+\underline{$C_1\otimes C_2\subseteq\mathbb{M}$}:\\
+Let $\mathbb{M}\subseteq\fld^{n_1\times n_2}$ be the set of matrices 
+such that all rows are codewords of $C_2$ and all columns are codewords of $C_1$.\\
 
+As defined, we know that $C_i:\fld^{k_i}\longrightarrow\fld^{n_i}$. Furthermore,
+we know $C_i$ is a linear function. This means that $C_i$ can be represented as a
+matrix, or in other words, we can describe $C_i(v)=C_i\cdot v, \forall v\fld^{k_1}$.\\
+Furthermore, if we have a matrix $A\in\fld^{n_1\times X}$,
+applying $C_2$ to all of it's columns is equivalent to multiplying $A$ by $C_2$ as in $C_2\cdot A$.
+If we want to do the equivalent operation for the rows, we can transpose $A$, then transpose the result
+after multiplication, meaning that for any matrix $A\in\fld^{x\times n_2}$,
+applying $(C_1\cdot(A^T))^T$ is equivalent to applying $C_1$ to all of $A$'s rows.\\
+
+Finally, if we want to first apply $C_2$ to all columns, then apply $C_1$ to all rows of
+a matrix $A\in\fld^{n_1\times n_2}$ - we can describe this operation as: $C_1(C_2A^T)^T$, meaning (*):
+\[
+    (C_1\otimes C_2)(A)=C_1(C_2A^T)^T=C_1(AC_2^T)=(C_1A)C_2^T=(C_2(C_1A)^T)^T
+\]
+
+Let $B\in C_1\otimes C_2$. By def. $\exists A: (C_1\otimes C_2)(A)=B$.
+From (*), this means $B=C_1(AC_2^T)$, or in other words $\exists D=AC_2^T$,
+s.t. $B = C_1D$ and so each column of $B$ is the result of the
+$C_1$ on a column of $D$ - meaning it is a leagal codeword of $C_1$.\\
+Similarly, from (*) we know $\exists D=C_1A$ s.t. $B=(C_2D^T)^T$ - meaning
+every row is a legal codeword of $C_2$.\\
+Hence $B\in\mathbb{M}$.
+In other words; $C_1\otimes C_2\subseteq\mathbb{M}$.
+
+\underline{$\mathbb{M}\subseteq C_1\otimes C_2$}:\\
+
+\underline{$C_1\otimes C_2=\mathbb{M}$}:\\
+An anti-symmetric relation $R\subseteq A\times B$ is
+a relation that obays:
+\[
+    \forall a\in A, \forall b\in B: (a,b)\in R \wedge (b,a)\in R \Rightarrow a=b
+\]
+Lemma: '$\subseteq$' is anti-symmetric:\\
+Let $A,B$ be two sets s.t. $A\subseteq B\wedge B\subseteq$.
+By def. this means:
+\[\forall a\in A, a\in B\wedge \forall b\in B, b\in A\]
+Thus $\forall x: x\in A\iff x\in B$ and so $A=B$.\\
+Hence, $\subseteq$ is anti-symmetric.\\
+
+Thus, since we have shown that $C_1\otimes C_2\subseteq\mathbb{M}$
+and also $\mathbb{M}\subseteq C_1\otimes C_2$, we can conclude that
+$C_1\otimes C_2=\mathbb{M}$.\\
+
+
+\textbf{But most importantly, we have shown we remember Matka!}
+
+\subsection{Rate}
+We know the input size of $C_1\otimes C_2$ is $k_1\cdot k_2$ and the outpus size
+is $n_1\cdot n_2$. Thus the rate is:
+$r=\frac{k_1\cdot k_2}{n_1\cdot n_2}=\frac{k_1}{n_1}\cdot\frac{k_2}{n_2}=r_1\cdot r_2$
+
+\subsection{Distance}
+Let $A\in\mathbb{M}$.\\
+By def. $hw(A)\geq \delta_1n_2n_1$, $hw(A)\geq \delta_2n_1n_2$.
+Thus:
+\[
+    hw(A)\geq max(\delta_1n_2n_1, \delta_2n_2n_1)
+    \Rightarrow hw(A)\geq max(\delta_1, \delta_2)\cdot n_1n_2
+    \Rightarrow \frac{hw(A)}{n_1n_2}\geq max(\delta_1, \delta_2)\geq \delta_1\delta_2
+\]
+Since $\delta =\frac{hw(A)}{n_1n_2}$ we have $\delta \geq \delta_1\delta_2$.
+\subsection{Tensor of Reed-Solomon}
+\subsection{Sumcheck for Tensor Codes}
+% Let $|S| := h$ and $\{s_1,...,s_k\} := S$.\\
+Given an input $c,\alpha$:\\
+Define $w\in\fld^n$ s.t. for all $\lambda\in S$,
+\[w[\lambda]:=\sum_{i_2,i_3,...,i_d\in S}c(\lambda, i_2,...,i_d)\]
+Let $v:=C_{base}^{-1}(w)$.\\
+
+\textbf{The protocol:}
 \begin{itemize}
-    \item
-    \[
-        (C_1\otimes C_2)(A)=C_1(C_2A^T)^T=C_1(AC_2^T)=(C_1A)C_2^T=(C_2(C_1A)^T)^T
-    \]
+    \item \underline{Verifier}:
+    \begin{enumerate}
+        \item Recive $v$ as $v'$.
+        \item Compute $w':=C_{base}(v')$.
+        \item Verify $\sum_{\lambda\in S}w'[\lambda]=\alpha$.
+        \item If $d=1$:
+        \begin{enumerate}
+            \item Verify $w'=c$ (by reading $c$).
+        \end{enumerate}
+        \item Otherwise:
+        \begin{enumerate}
+            \item Sample $\lambda\leftarrow^\$[n]$.
+            \item Verify $w'[\lambda]=w[\lambda]$, recursively
+                with $\alpha$ being $w'[\lambda]$,\\
+                $c$ being $c(\lambda,:,...,:)$
+                (the left $c$ is the parameter of the recursively
+                invoked protocol and the right $c$ is the paraneter of the invoking protocol)
+                and $d$ being $d-1$.
+        \end{enumerate}
+    \end{enumerate}
+    \item \underline{Prover}:
+    \begin{enumerate}
+        \item Send $v$.
+        \item Recursively follow the verifier's protocol.
+    \end{enumerate}
+\end{itemize}
+
+\textbf{Correctness:}
+\begin{itemize}
+    \item \underline{Complexity}:\\
+        The base cases's complexity is $O(log|\fld|\cdot n)$.\\
+        Each recusive step also requires $O(n)$ opeartions,
+        where each one is an operation in the field $\fld$ and thus can be done with
+        complexity $log|\fld|$, so the total complexity of a step is $O(n\cdot log|\fld|)$
+        and the total complexity is $O(n\cdot d\cdot log|\fld|)$.\\
+    \item \underline{Completness}:\\
+        The base case is immidiate. And recursively:\\
+        If $c, \alpha$ satisfy the condition and $P$ sends $v'=v$.\\
+        So $w'=w$.
+        As we know $w$ satisfies the formula and so does $w'$ and the verifier passes step 2.,
+        with the inductive assumption for completness - the verifier will also
+        accept for $w'[\lambda]$ for any $\lambda\in[n]$ and the verifier passes 4.b.\\
+        
+    \item \underline{Soundness}:\\
+        In the case $d=1$ the checking is exhaustive, so the protocol is perfectly sound,
+        so the soundness error is $1\geq 1-\delta$.\\
+        
+        Let us assume a soundness error $1-\delta^{d-1}$ for the protocol
+        of order $d-1$.\\
+        Now consider an instance of protocol with order $d$ on input $c,\alpha$ that do
+        not satisfy the condition.\\
+
+        If $v'=v$, the verifier will disqualify the proof w.p. 1 at step 2 (*).\\
+
+        If $v'\neq v$:
+        \begin{enumerate}
+            \item Since $v'\neq v$, $w'\neq w$.
+            \item Since $\delta$ is the minimal relative distance of $C_{base}$:
+                \[
+                    \forall a,b\in C_{base}: a\neq b,
+                    \pr_{\lambda\leftarrow [n]}[a(\lambda)\neq b(\lambda)]\geq\delta
+                \]
+            \item Due to 1. and 2.:
+                \[
+                    \pr_{\lambda\leftarrow [n]}[w'(\lambda)\neq w(\lambda)]\geq\delta
+                \]
+            \item If $\lambda$ is sampled s.t. it satisfies the expression at 3., the verifier will thus disqualify the proof w.p.
+            at-least $1-\delta^{d-1}$ at step 4.b. due to the inductive assumption.
+            \item Thus the chance that the verifier will accept is no more than $\delta\cdot \delta^{d-1}=\delta^d$ (**).
+        \end{enumerate}
+
+        Now consider the total probability of the verifier accepting the proof:
+        \[
+            \pr_{\lambda\leftarrow[n]}[(V,P)(c,\alpha)=1]
+        \]\[
+            = x\cdot\pr_{\lambda\leftarrow[n]}[(V,P)(c,\alpha)=1\mid v'=v]
+                +(1-x)\cdot\pr_{\lambda\leftarrow[n]}[(V,P)(c,\alpha)=1\mid v'\neq v]
+        \]\[
+            \leq \pr_{\lambda\leftarrow[n]}[(V,P)(c,\alpha)=1\mid v'=v]
+                +\pr_{\lambda\leftarrow[n]}[(V,P)(c,\alpha)=1\mid v'\neq v]
+        \]\[
+            =_{(*)} 0 +\pr_{\lambda\leftarrow[n]}[(V,P)(c,\alpha)=1\mid v'\neq v]
+        \]\[
+            \leq_{(**)} 1-\delta^d
+        \]
+        Hence we have a soundness error of $1-\delta^d$.
 \end{itemize}
