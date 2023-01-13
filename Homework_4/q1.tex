@@ -1,5 +1,5 @@
 \subsection{}
-Given a graph of $vertecies$, 
+Given a graph with $n$ vertices, 
 consider the following series of matrices:\\
 \[
 	M_k[i,j]:=
@@ -33,9 +33,54 @@ Finally we have that $M_{k}\otimes M_{k}=M_{2k}$.\\
 \underline{Algorithm}:
 The algorithm which the circuit will follow is as follows:\\
 \begin{enumerate}
-	\item Initialize $M_1$ to be the adjacency matrix of the graph.
-	\item For each $k\in[n]$:
-\begin{enumerate}
-	\item Compute $M_{2k}$ by applying the operation $\otimes$ on $M_k$ and $M_k$.
-	\item If $k=2^r$ for some $r\in[n]$, then set $M_k$ to be $M_{2^r}$.
+	\item $k\leftarrow 1$
+	\item $M\leftarrow E$
+	\item while $k<n$:
+	\begin{enumerate}
+		\item $M\leftarrow M\otimes M$
+		\item $k\leftarrow 2k$
+	\end{enumerate}
+	\item return $M[s,t]$.
 \end{enumerate}
+Due to the lemma, at the end of each iteration - $M=M_k$,
+this means that when the loop ends, $M=M_n$.
+Thus $M[s,t]$ is the correct output.\\
+
+\underline{Circuit}:
+Here we assume the circuit recives $E,s,t$ as input, we assume $E$ is represented
+in the adjacency matrix form.\\
+The $\otimes$ operation can be implemented with depth $O(log(n))$
+using a binary tree of the big $\vee$ gate.
+Additionally $log(n)$ steps are required for $k:=n$ - each step
+is a set of layers added to the circuit.\\
+With $log(n)$ complexity we can implement a $MUX$ gate
+to select $s,t$ from $M$ after the layer.\\
+Hence the total depth of the circuit is $O(log(n)^2)$.
+The maximum width of the circuit is $O(n^2)$.
+
+\subsection{}
+Let $L\in PSPACE$.\\
+Hence exists a polynomial space nondeterministic turing machine $M_L$ that decides it.\\
+Consider the set of configurations possible for $M_L$.
+Since it's set of states if finite and the set of values for
+it's tape is exponentionally bounded by a polynome - 
+the set of possible configurations for it is bounded
+exponentionally by a polynome.\\
+
+Each such configuration can be represented as a vertex
+in the graph of all possible configurations.
+Moreover, each possible transition from one configuration to another
+can be represented as an edge in the graph.
+Denote this configuration graph as $G$.\\
+
+Define the reduction $f$ as $f(x)=(G, s, t)$
+where $s$ is the vertex corresponding to the initial
+configuration of $M_L$ on the input $x$, and $t$
+is vertex corresponding to the accepting configuration
+\footnote{
+	WLOG assume there is one accepting configuration,
+	otherwise we can either construct a new turing
+	machine that clears it's tape and then accepts,
+	or add to the graph a new node ($t$) that
+	is connected to all accepting configuration vertecies.
+}.
