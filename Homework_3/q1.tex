@@ -85,6 +85,7 @@ and accepts iff $V_m$ accepts.\\
 	\] 
 \end{itemize}
 
+<<<<<<< HEAD
 \subsection{}
 Let $L\in PCP$ as stated, let $V_p$ be a $PCP$ verifier.\\
 Define an $MIP$ protocol as follows on an input $x$:
@@ -104,3 +105,124 @@ Define an $MIP$ protocol as follows on an input $x$:
 	\end{algorithmic}
 \end{itemize}
 
+=======
+
+\subsection{}
+Let $L\subseteq\onz^*$ be a language with a $PCP$ verifier $V_p$ set of proofs
+bounded by in length $m$.\\
+Define the following $q-prover$ $MIP$ for it:\\
+\textbf{The protocol on input $x$}:
+\begin{itemize}
+	\item \underline{Verifier $V_m$}:
+		\begin{enumerate}
+			\item sample $B\leftarrow^\$\onz$.
+			\item if $B=0$ (verify $PCP$):
+			\begin{enumerate}
+				\item Get the set of queries $Q=\{Q_i\mid i\in[q]\}$ from $V_p$ on input $x$.
+				\item For all $i\in[q]$, send $Q_i$ to $P_i$.
+				\item Denote the bit returned by $P_i$ with $b_i$.
+				\item Verify $V_p$'s acceptence on query results $\{b_i\mid i\in[q]\}$.
+			\end{enumerate}
+			\item if $B=1$ (Verify consistency):
+			\begin{enumerate}
+				\item Sample $r\leftarrow^\$[m]$.
+				\item For all $i\in[q]$, send $r$ to $P_i$.
+				\item Denote the bit returned by $P_i$ with $b_i$.
+				\item Verify $b_i=b_j, \forall i,j\in[q]$.
+			\end{enumerate}
+		\end{enumerate}
+	\item \underline{Prover $P_i$}:
+		\begin{enumerate}	
+			\item Recive an index $i$ from the verifier.
+			\item Return $PCP_x[i]$.
+		\end{enumerate}	
+\end{itemize}
+
+
+
+\textbf{Correctness}:
+\begin{itemize}
+	\item \underline{Complexity}:\\
+		The integer representation of each query is of size $log(m)$,
+		thus it is the length of the messages sent by $V_m$.
+	\item \underline{Completness}:\\
+		Let $x\in L$. Denote with $PCP_x[Q]$ the set of bits
+		corresponding to the queries $Q$ in $PCP_x$.\\
+		In the standard usage of the $PCP$ verifier $V_p$ - 
+		it will recive $PCP_x[Q]$ as the responses to the queries $Q$ - 
+		and since it has perfect completness (WLOG as seen previously in the course),
+		it will accept.\\
+		When $V_m$ invokes $V_p$ - it sends it the same $PCP_x[Q]$,
+		thus $V_p$ accepts here too - and so does $V_m$.
+	\item \underline{Soundness}:\\
+		Let $x\notin L$.\\
+		Let $\{P_i^*\mid i\in[q]\}$ be a set of (possibly mallicious) provers.\\
+		
+		Now we use these provers to construct $PCP_x$:\\
+		$PCP_x$ has a section corresponding to each prover $P_i^*$, and in each section - 
+		the $j$'th bit corresponds to the response of $P_i^*$ on query $j$ which
+		is the most probable. If there is more than one most probable response
+		select the minimal one.\\
+
+		As a shorthand denote $P_1^*,...,P_q^*$ as $PS^*$.\\
+
+		Denote with $C_{i,j}$ the event that $P_i$ returns the most
+		probable response on query $j$ and $c_{i,j}=\pr[C_{i,j}]$.
+		Since there are only two possible
+		responses (1 and 0) - $c_{i,j}\geq\frac{1}{2}$.\\
+
+		In the event that $B=0$:\\
+		Let $C:= \bigwedge_{i\in [q]}C_{i,Q_i}$ - meaning the event that
+		all provers were consistent with $PCP_x$. Let $c=\pr[C]$.\\
+		Since we know the provers cannot communicate - the probabilities for their
+		selections are independent. Hence $c=\mathbb{E}_Q[\prod_{i\in [q]}c_{i,Q_i}]$.
+		\[
+			\pr[(V_m,PS^*)(x)=1\mid B=0]	
+		\]
+		\[
+			=\pr[(V_m,PS^*)(x)=1\mid B=0\wedge C]\pr[C]
+			+\pr[(V_m,PS^*)(x)=1\mid B=0\wedge \neg C]\pr[\neg C]
+		\]
+		\[
+			=c\pr[(V_m,PS^*)(x)=1\mid B=0\wedge C]
+			+(1-c)\pr[(V_m,PS^*)(x)=1\mid B=0\wedge \neg C]
+		\]
+		\[
+			=c\pr[V_p(x, PCP_x)=1]
+			+(1-c)\pr[(V_m,PS^*)(x)=1\mid B=0\wedge \neg C]
+		\]
+		\[
+			\leq c\pr[V_p(x, PCP_x)=1]+(1-c)\cdot 1
+			=1+c(\pr[V_p(x, PCP_x)=1]-1)
+		\]
+
+		In the event that $B=1$:\\
+		Let $C:=\bigwedge_{i\in[q]}C_{i,r}$ and $c':=\pr[C]$.\\
+		Thus $c=\frac{1}{q}\sum_{r\in[q]}\prod_{i\in[q]}c_{i,r}$.\\
+		\[
+			\pr[(V_m,PS^*)(x)=1\mid B=1]
+		\]
+		\[
+			\pr[(V_m,PS^*)(x)=1\mid B=1\wedge C]\pr[C]
+			+\pr[(V_m,PS^*)(x)=1\mid B=1\wedge \neg C]\pr[\neg C]
+		\]
+		\[
+			=c\pr[(V_m,PS^*)(x)=1\mid B=1\wedge C]
+			+(1-c)\pr[(V_m,PS^*)(x)=1\mid B=1\wedge \neg C]
+		\]
+		\[
+			=c\cdot 1+(1-c)\cdot 0=c
+		\]
+
+		Thus:
+		\[
+			\pr[(V_m,PS^*)(x)=1]
+			=\frac{1}{2}\pr[(V_m,PS^*)(x)=1\mid B=0]+\frac{1}{2}\pr[(V_m,PS^*)(x)=1\mid B=1]
+		\]
+		\[
+			\leq \frac{1+c(\pr[V_p(x, PCP_x)=1]-1)}{2}+\frac{c}{2}=\frac{1+\pr[V_p(x, PCP_x)=1]}{2}
+		\]
+
+		Hence since $V_p$ has constant soundness - $V_m$ has constant soundness too.
+\end{itemize}
+>>>>>>> 47a9ce8dd23b6c40f3d2a3a0a1f0780b343dcda2
