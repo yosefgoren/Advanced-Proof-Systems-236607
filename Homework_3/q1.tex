@@ -70,7 +70,7 @@ and accepts iff $V_m$ accepts.\\
 	\item Soundness:\\
 	Let there be a set of $PCP_x$ values (defined also on $x\notin L$).
 	WLOG $\forall x,|PCP_x|=l_P$ - since it is easy for $V$ to check if that is the case.\\
-	Thus we can esaly use this set of $PCP_x$'s to
+	Thus we can easly use this set of $PCP_x$'s to
 	construct a set of 'mallicious' provers $P_0,...,P_{k-1}$:
 	Each $P_i$ on query $m_{q,i}$ will response with:
 	\[
@@ -84,3 +84,23 @@ and accepts iff $V_m$ accepts.\\
 		\pr[V_p(x,PCP_x)=1]\leq \pr[(V_m,P_0,...,P_{k-1})(x)=1]\leq\frac{1}{2}
 	\] 
 \end{itemize}
+
+\subsection{}
+Let $L\in PCP$ as stated, let $V_p$ be a $PCP$ verifier.\\
+Define an $MIP$ protocol as follows on an input $x$:
+\begin{itemize}
+	\item There are $q^2$ provers, denoted $P_{i,j}$.
+	\item The verifier $V$:\\
+	\begin{algorithmic}
+		\State Get queries $R=\{r_i\}_{i=1}^q$ from $V_p$.
+		\State Sample $b\leftarrow^\$\onz$.
+		\If{$b=0$} 
+			\State Verify provers are consistent:
+			\State Sample $k\leftarrow^\$[q]$.
+			\State Verify $\forall i,j\in[q]:P_{k,i}(R)=P_{k,j}(R)$
+		\Else
+			\State 
+		\EndIf 
+	\end{algorithmic}
+\end{itemize}
+
