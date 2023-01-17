@@ -29,19 +29,19 @@ Conversely, if $(M_k\otimes M_k)[i,j]=1$, then there exists $x\in[n]$ such that 
 which means that there exists a path from $i$ to $x$ of length $\leq k$ and a path from $x$ to $j$ of length $\leq k$.
 So $(M_k\otimes M_k)[i,j]\Rightarrow M_{2k}[i,j]$.\\
 Finally we have that $M_{k}\otimes M_{k}=M_{2k}$.\\
-
+\newpage 
 \underline{Algorithm}:
 The algorithm which the circuit will follow is as follows:\\
-\begin{enumerate}
-	\item $k\leftarrow 1$
-	\item $M\leftarrow E$
-	\item while $k<n$:
-	\begin{enumerate}
-		\item $M\leftarrow M\otimes M$
-		\item $k\leftarrow 2k$
-	\end{enumerate}
-	\item return $M[s,t]$.
-\end{enumerate}
+\begin{algorithmic}
+	\State $k\leftarrow 1$
+	\State $M\leftarrow E$
+	\While{$k<n$}
+		\State $M\leftarrow M\otimes M$
+		\State $k\leftarrow 2k$
+	\EndWhile
+	\State \Return $M[s,t]$.
+\end{algorithmic}
+
 Due to the lemma, at the end of each iteration - $M=M_k$,
 this means that when the loop ends, $M=M_n$.
 Thus $M[s,t]$ is the correct output.\\
@@ -62,7 +62,7 @@ The maximum width of the circuit is $O(n^2)$.
 Let $L\in PSPACE$.\\
 Hence exists a polynomial space nondeterministic turing machine $M_L$ that decides it.\\
 Consider the set of configurations possible for $M_L$.
-Since it's set of states if finite and the set of values for
+Since it's set of states is constant and the set of values for
 it's tape is exponentionally bounded by a polynome - 
 the set of possible configurations for it is bounded
 exponentionally by a polynome.\\
