@@ -1,0 +1,13 @@
+
+
+\subsection{Doubly Efficient Interactive Proofs}
+\begin{definition}[Logspace-Uniform]
+	We say that \{$C_n\}_{n\in\mathbb{N}}$ is logspace uniform if exists
+	a turing machine that on input $1^n$ outputs $C_n$.
+\end{definition}
+
+\begin{theorem}
+	If $L$ is accepted by logspace uniform circuits of depth $d(n)$ and of size $poly(n)$,
+	then $L$ has an Interactive proof which the prover runs in $poly(n)$
+	time and the verifier runs in $(n+d)polylog(n)$ time with $d\cdot polylog(n)$ rounds.
+\end{theorem}

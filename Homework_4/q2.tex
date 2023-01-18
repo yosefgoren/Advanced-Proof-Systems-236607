@@ -1,0 +1,74 @@
+Let $L\in NP$ be decided by a family of logspace uniform circuits
+of size $\tilde{O}(n)$ - $\{C\}_{i\in\mathbb{N}}$.\\
+Let $L\:=\{(x_1,...,x_k)\mid \forall i\in[k], x_i\in L\ wedge |x_i|=|x_1|=n\}$.\\
+We also know that $t,k=poly(n)$.\\
+
+Define the following family of circuits $C':=\{C'_i\}_{i\in\mathbb{N}}$:\\
+The circuit $C'_i$ is defined as the concatenation
+of $C_i$; $k$ times side by side, followed by
+a tree of '$\wedge$' operators that combine
+the outputs of all $C_i$ instances to a single output.\\
+
+Since for each area of the input of $C_i'$
+that input is processed by the circuit $C_i$,
+and since the final result of $C_i'$ is to accept
+iff $\forall j\in[k], x_j\in L$ - then $C'$
+accepts $L'$ (note the sizes must match
+also to be a valid input to $C_i'$).\\
+
+Now consider the size and depth of $C'$;
+it's size is $k$ times the size
+of $C$'s circuits,
+with the addition of the tree of '$\wedge$' operators.
+Meaning the size is $\leq\tilde{O}(t)\cdot k+2\cdot log(k)$.
+The depth of $C$ is bounded by it's size, hence
+the depth of $C'$ is $\leq \tilde{O}(t)+log(k)$.\\
+
+Now consider the theorem on compiling logspace uniform
+circuits into IP's seen in lecture:\\
+\begin{theorem}[logspace uniform circuits compiler]
+	If $L$ is accepted by logspace uniform circuits of depth $d(n)$ and of size $poly(n)$,
+	then $L$ has an Interactive proof which the prover runs in $poly(n)$
+	time and the verifier runs in $(n+d)polylog(n)$ time with $d\cdot polylog(n)$ rounds.
+\end{theorem}
+
+Thus exists an IP proof for $L'$ based on $C'$,
+s.t. the prover runs in time $poly(|x'|)$ where $x'\in L'$
+or $poly(n\cdot k)$, there
+are up to $d\cdot polylog(n\cdot k) rounds$ and the verifier
+runs in time $(n\cdot k+d)polylog(n\cdot k)$.\\
+Now all that is left is to evaluate the complexities:
+\begin{itemize}
+	\item \underline{Prover:}\\
+		As required $poly(n\cdot k)\leq poly(n,k,t)$.
+	\item \underline{Verifier:}\\
+	\[
+		(n\cdot k+d)polylog(n\cdot k)
+		\leq (n\cdot k+\tilde{O}(t)+log(k))polylog(n\cdot k)
+	\]\[
+		= (n\cdot k+t\cdot polylog(t)+log(k))polylog(n\cdot k)
+		= (n\cdot k+t\cdot polylog(poly(n))+log(k))polylog(n\cdot k)
+	\]\[
+		= (n\cdot k)polylog(n\cdot k)+t\cdot polylog(n)polylog(n\cdot k)+log(k)polylog(n\cdot k)
+	\]\[
+		= \tilde{O}(n\cdot k)+t\cdot polylog(n\cdot k)+log(k)polylog(n\cdot k)
+	\]\[	
+		=\footnote{
+		$
+			polylog(n\cdot k)=polylog(n\cdot poly(n))=
+			poly(log(n\cdot n^c))=poly((c+1)log(n))=polylog(n)
+		$	
+		}
+		\tilde{O}(n\cdot k)+t\cdot polylog(n)+log(k)polylog(n)
+	\]\[
+		=\tilde{O}(n\cdot k)+(t+log(k))polylog(n)
+	\]
+	\item \underline{Communications:}\\
+	\[
+		d\cdot polylog(n\cdot k)
+		= \tilde{O}(t)polylog(k)polylog(n\cdot k)
+		= \tilde{O}(t)polylog(n)\footnote{
+			is the same as $(log(k)+t)polylog(n)$.
+		}
+		\]
+\end{itemize}

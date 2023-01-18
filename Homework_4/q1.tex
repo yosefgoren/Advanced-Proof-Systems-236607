@@ -84,3 +84,33 @@ is vertex corresponding to the accepting configuration
 	or add to the graph a new node ($t$) that
 	is connected to all accepting configuration vertecies.
 }.
+
+\subsection{}
+Let $L\in PSPACE$.\\
+Due to the reduction from the previous question,
+we know $L$ can be solved by a
+poly turing machine for the ST-connectivity
+problem as a graph with size exponential w.r. to $n$ (where $x\in L, n=|x|$).\\
+Also, due to the first question, we have
+a family of circuits that accept
+or reject these exponential graphs 
+with $size=poly(|G|)=poly(exp(n))=exp(n), depth=polylog(|G|)=polylog(exp(n))=poly(n)$.
+
+\subsection{}
+Let $L\in PSPACE$.\\
+From the last question we have 
+that it has an exponential size poly depth
+circuit family \footnote{Exponential size'd family sounds amazing},
+hence by the reduction seen in class -
+it has an IP with verifier running 
+in time $(poly(n)+n)polylog(exp(n))=poly(n)$.
+Hence - $L\in IP$
+\[
+	\square
+\]
+
+\subsection{}
+The complexity of the prover seen in class
+is $poly(S)$, where $S$ is the size of the
+circuit so the prover
+time is $poly(exp(n))$ or just $exp(n)$.
