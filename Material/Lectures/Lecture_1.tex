@@ -74,9 +74,55 @@ The graphs $G_1=(V,E_1), G_2=(V,E_2)$ are isomorphic or $(G_1,G_2)\in GI$ if $\e
 More simply - two graphs are isomorphic if they are identical up to a renaming of their vertices.\\
 
 $GNI$ is the set of pairs of graphs which are isomorphic.\\
-\begin{itemize}
-    \item Claim (no proof): $NP\subseteq IP$.\\
-    \item Claim (proof sketch): $GI\in IP$.\\
-    By finding the permutation $\pi$ it is easy to check the $GI$ condition over a given $(G_1,G_2)$ thus we have an $NP$ relation, meaning $GI\in NP$.\\
-    \item Claim (no proof): $GNI\in IP$.
-\end{itemize}
+\begin{theorem}
+    $GI\in IP$.
+\end{theorem}
+\begin{proof}
+    If $G_1$ and $G_2$ are isomorphic,
+    exists a permutation $\pi$ s.t. $(u,v)\in E_1 \iff (\pi(u), \pi(v))\in E_2$.
+    Thus this $\pi$ can be used as the NP witness for the $GI$ problem.
+\end{proof}
+
+\begin{theorem}
+    $GNI\in IP$.
+\end{theorem}
+\begin{proof}
+    Consider the following protocol on the input $(G_0,G_1)$:
+    \begin{itemize}
+        \item $V$ chooses a random permutation $\pi$,
+        sample $b\leftarrow\onz$. Then sends $\pi(G_b)$ to $P$.
+        \item $P$ defines $b'$ to be $1$ if $\exists \pi':\pi(G_b)=\pi'(G_1)$ (by brute-force for example),
+        and $0$ otherwise and $0$. It then sends $b'$ to $V$.
+        \item $V$ accepts iff $b'=b$.
+    \end{itemize}
+
+    \begin{itemize}
+        \item Completness:
+        \[
+            (G_0,G_1)\in GNI
+            \Rightarrow \forall \pi: \pi(G_0)\neq G_1
+            \Rightarrow \forall \pi,\pi': \pi(G_0)\neq \pi'(G_1)
+        \]
+        If $b=0$ then $P$ will not find a permutation $\pi': \pi(G_b)=\pi(G_1)$
+        thus $b'=0$, so $b=b'$ and $V$ will accept.\\
+        If $b=1$ then $P$ will find a permutation $\pi': \pi(G_b)=\pi(G_1)$
+        thus $b'=1$, so $b=b'$ and $V$ will accept.\\
+        Hence we have perfect completeness.
+        \item Soundness:
+        Let $(G_0,G_1)\notin GNI$, Let $P^*$ be a $PPT$.\\
+        Consider the space of all graphs isomprphic to $G_0$:
+        by uniformly sampling a random permutation $\pi$ and applying
+        it to $G_0$, we get that $\pi(G_0)$ is uniformly sampled
+        across the space of graphs isomorphic to $G_0$.\\
+        This is also true for $G_1$.\\
+        Hence the distribution of $\pi(G_b)$ does not depend on $b$,
+        so $P^*$ has recived zero information regarding $b$,
+        and it cannot do significatly better than random guessing.\\
+        Hence it's probability of success is at most $0.5$.\\
+        Hence soundness error is $0.5$.
+        \item Efficiency:
+        Sampling a random permutation can be done efficiently, 
+        and the same applies to computing $\pi(G_b)$ and to
+        verifying $b=b'$.
+    \end{itemize}
+\end{proof}
